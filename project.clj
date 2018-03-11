@@ -1,5 +1,5 @@
 (defproject hexagram30/shell "0.1.0-SNAPSHOT"
-  :description "A user shell for hexagramMUSH"
+  :description "Various shell implementations for use by hexagram30 projects"
   :url "https://github.com/hexagram30/shell"
   :license {
     :name "Apache License, Version 2.0"
