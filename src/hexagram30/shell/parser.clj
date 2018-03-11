@@ -3,20 +3,12 @@
     [clojure.string :as string]
     [hexagram30.shell.grammar :as grammar]))
 
-(defrecord Result [
+(defrecord Response [
   command
   subcommands
   tail
   result-tmpl
   result-args])
-
-(defn canonical-cmd
-  [coll]
-  (if-let [cmd (first coll)]
-    (if (string? cmd)
-        (assoc coll 0 (keyword cmd))
-        coll)
-    []))
 
 (defn line->words
   [line]
@@ -29,29 +21,29 @@
 (defn dispatch
   [cmd subcmds tail]
   (case cmd
-    "" (->Result cmd subcmds nil "Please type something ...\n" nil)
-    "bye" (->Result cmd subcmds nil "Good-bye\n" nil)
-    "say" (->Result cmd
-                    subcmds
-                    tail
-                    "You say: '%s'\n"
-                    [(->> tail
-                          (remove nil?)
-                          (words->line))])))
+    "" (->Response cmd subcmds nil "Please type something ...\n" nil)
+    "bye" (->Response cmd subcmds nil "Good-bye\n" nil)
+    "say" (->Response cmd
+                      subcmds
+                      tail
+                      "You say: '%s'\n"
+                      [(->> tail
+                            (remove nil?)
+                            (words->line))])))
 
 (defn error
   [cmd subcmds tail]
   (if (seq subcmds)
-    (->Result cmd
-              subcmds
-              nil
-              "Error: command '%s' with subcommand(s) %s is not supported.\n"
-              [cmd (vec subcmds)])
-    (->Result cmd
-              subcmds
-              nil
-              "Error: command '%s' not supported.\n"
-              [cmd])))
+    (->Response cmd
+                subcmds
+                nil
+                "Error: command '%s' with subcommand(s) %s is not supported.\n"
+                [cmd (vec subcmds)])
+    (->Response cmd
+                subcmds
+                nil
+                "Error: command '%s' not supported.\n"
+                [cmd])))
 
 (defn parse
   ([line]
