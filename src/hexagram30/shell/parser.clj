@@ -19,10 +19,10 @@
   (string/join " " words))
 
 (defn dispatch
-  [cmd subcmds tail]
-  (case cmd
+  [disconnect-command cmd subcmds tail]
+  (condp = cmd
     "" (->Response cmd subcmds nil "Please type something ...\n" nil)
-    "bye" (->Response cmd subcmds nil "Good-bye\n" nil)
+    disconnect-command (->Response cmd subcmds nil "Good-bye\n" nil)
     "say" (->Response cmd
                       subcmds
                       tail
@@ -46,12 +46,12 @@
                 [cmd])))
 
 (defn parse
-  ([line]
-    (parse grammar/default-command-tree line))
-  ([command-grammar line]
+  ([disconnect-command line]
+    (parse grammar/default-command-tree disconnect-command line))
+  ([command-grammar disconnect-command line]
     (let [args (line->words line)
           [cmd & subcmds :as cmds] (grammar/get-commands command-grammar args)
           tail (grammar/get-tail command-grammar args)]
       (if (grammar/validate command-grammar args)
-        (dispatch cmd subcmds tail)
+        (dispatch disconnect-command cmd subcmds tail)
         (error cmd subcmds tail)))))
