@@ -29,15 +29,15 @@
 (defn dispatch
   [cmd subcmds tail]
   (case cmd
-    "" (->Result cmd subcmds nil "Please type something ..." nil)
-    "bye" (->Result cmd subcmds nil "Good-bye" nil)
+    "" (->Result cmd subcmds nil "Please type something ...\n" nil)
+    "bye" (->Result cmd subcmds nil "Good-bye\n" nil)
     "say" (->Result cmd
                     subcmds
                     tail
-                    "You say: '%s'"
-                    (->> tail
-                         (remove nil?)
-                         (words->line)))))
+                    "You say: '%s'\n"
+                    [(->> tail
+                          (remove nil?)
+                          (words->line))])))
 
 (defn error
   [cmd subcmds tail]
@@ -45,12 +45,12 @@
     (->Result cmd
               subcmds
               nil
-              "Error: command '%s' with subcommands '%s' is not supported."
-              [cmd subcmds])
+              "Error: command '%s' with subcommand(s) %s is not supported.\n"
+              [cmd (vec subcmds)])
     (->Result cmd
               subcmds
               nil
-              "Error: command '%s' not supported."
+              "Error: command '%s' not supported.\n"
               [cmd])))
 
 (defn parse
