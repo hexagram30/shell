@@ -1,10 +1,10 @@
-(ns hexagram30.shell.core
+(ns hxgm30.shell.core
   (:require
-    [hexagram30.shell.impl.default :as default]
-    [hexagram30.shell.impl.demo :as demo])
+    [hxgm30.shell.impl.default :as default]
+    [hxgm30.shell.impl.demo :as demo])
   (:import
-    (hexagram30.shell.impl.default DefaultShell)
-    (hexagram30.shell.impl.demo DemoShell))
+    (hxgm30.shell.impl.default DefaultShell)
+    (hxgm30.shell.impl.demo DemoShell))
   (:refer-clojure :exclude [empty parse]))
 
 (defprotocol ShellAPI

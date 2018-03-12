@@ -1,9 +1,9 @@
-(ns hexagram30.shell.parser-test
+(ns hxgm30.shell.parser-test
   (:require
     [clojure.string :as string]
     [clojure.test :refer :all]
-    [hexagram30.shell.grammar-test :as grammar-test]
-    [hexagram30.shell.parser :as parser]))
+    [hxgm30.shell.grammar-test :as grammar-test]
+    [hxgm30.shell.parser :as parser]))
 
 (deftest line->words
   (is (= ["ps"] (parser/line->words "ps")))

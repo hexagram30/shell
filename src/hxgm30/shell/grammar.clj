@@ -1,4 +1,4 @@
-(ns hexagram30.shell.grammar)
+(ns hxgm30.shell.grammar)
 
 (def default-command-tree
   {"" true

@@ -1,6 +1,6 @@
-(ns hexagram30.shell.impl.demo
+(ns hxgm30.shell.impl.demo
   (:require
-    [hexagram30.shell.impl.default :as default])
+    [hxgm30.shell.impl.default :as default])
   (:import
     (java.net InetAddress)
     (java.util Date))

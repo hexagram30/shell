@@ -1,7 +1,7 @@
-(ns hexagram30.shell.parser
+(ns hxgm30.shell.parser
   (:require
     [clojure.string :as string]
-    [hexagram30.shell.grammar :as grammar]))
+    [hxgm30.shell.grammar :as grammar]))
 
 (defrecord Response [
   command

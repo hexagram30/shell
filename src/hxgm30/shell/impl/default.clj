@@ -1,6 +1,6 @@
-(ns hexagram30.shell.impl.default
+(ns hxgm30.shell.impl.default
   (:require
-    [hexagram30.shell.parser :as parser]
+    [hxgm30.shell.parser :as parser]
     [taoensso.timbre :as log])
   (:refer-clojure :exclude [empty parse]))
 
