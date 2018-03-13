@@ -10,15 +10,11 @@
 
 (defn banner
   [this]
-  )
+  :not-implemented)
 
 (defn disconnect
   [this & args]
   (apply (:disconnect-handler this) args))
-
-(defn empty
-  [this request]
-  )
 
 (defn parse
   [this request]
@@ -35,10 +31,6 @@
     {:response response
      :message (render this response)}))
 
-(defn handle-exception
-  [this request]
-  )
-
 (defn handle-disconnect
   [this response future]
   (when (= (:disconnect-command this) (:command response))
@@ -47,9 +39,7 @@
 (def behaviour
   {:banner banner
    :disconnect disconnect
-   :empty empty
    :parse parse
    :render render
    :handle-request handle-request
-   :handle-exception handle-exception
    :handle-disconnect handle-disconnect})

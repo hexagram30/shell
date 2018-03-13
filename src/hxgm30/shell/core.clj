@@ -18,13 +18,6 @@
     While terminal implementations may choose to call this function directly,
     it is recommended instead that such implementations use the
     `handle-request` function instead,")
-  (empty [this request]
-    "In the event that request data is empty, implementations may want to
-    perform a specific action.
-
-    While terminal implementations may choose to call this function directly,
-    it is recommended instead that such implementations use the
-    `handle-request` function instead,")
   (parse [this request]
     "The intended use of this function is to use an instantiation of a command
     parser to process the input from the user.
@@ -40,11 +33,9 @@
     Additionally, implementations of this function should make calls to
     `disconnect`, `empty`, and `parse` as needed, assuring flexibility of
     usage.")
-  (handle-exception [this cause]
-    "This function is responsible for displaying messages and taking other
-    action when a terminal catches an exception.")
   (handle-disconnect [this context request]
-    ""))
+    "Use this method to check for a disconnect comment and then dispatch the
+    disconnect function."))
 
 (extend DefaultShell
         ShellAPI
