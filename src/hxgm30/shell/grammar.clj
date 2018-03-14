@@ -6,6 +6,25 @@
    "say" {:depth 1
           :any true}})
 
+(def login-command-tree
+  {"" true
+   "QUIT" true
+   "login" {:depth 1
+            :any true}
+   "create" {:depth 1
+             :any true}})
+
+(def demo-command-tree
+  {"" true
+   "logout" true
+   "say" {:depth 1
+          :any true}})
+
+(def grammars
+  {:default default-command-tree
+   :login login-command-tree
+   :demo demo-command-tree})
+
 (defn valid-child?
   [result]
   (cond (true? result) true

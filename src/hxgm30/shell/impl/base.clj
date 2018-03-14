@@ -1,12 +1,16 @@
-(ns hxgm30.shell.impl.default
+(ns hxgm30.shell.impl.base
   (:require
     [hxgm30.shell.parser :as parser]
     [taoensso.timbre :as log])
   (:refer-clojure :exclude [empty parse]))
 
 (defrecord DefaultShell [
+  grammar-type
+  prompt
   disconnect-command
-  disconnect-handler])
+  disconnect-handler
+  legal-subshells
+  active-subshell])
 
 (defn banner
   [this]
@@ -22,8 +26,10 @@
 
 (defn render
   [this response]
-  (apply format (concat [(:result-tmpl response)]
-                        (:result-args response))))
+  (str
+   (apply format (concat [(:result-tmpl response)]
+                         (:result-args response)))
+   (or (:prompt this) "")))
 
 (defn handle-request
   [this request]

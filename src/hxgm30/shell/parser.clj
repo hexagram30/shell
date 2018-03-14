@@ -3,6 +3,11 @@
     [clojure.string :as string]
     [hxgm30.shell.grammar :as grammar]))
 
+(defrecord Request [
+  data
+  grammar-key
+  disconnect-command])
+
 (defrecord Response [
   command
   subcommands
@@ -18,6 +23,10 @@
   [words]
   (string/join " " words))
 
+;; XXX Dispatch and error functions are a big mess: too much implementation
+;;     specific stuff here; probbaly need some command abstractions
+;; XXX Each shell should have its own dispatcher, not one for all (too much
+;;     possibility of collision)
 (defn dispatch
   [disconnect-command cmd subcmds tail]
   (condp = cmd
@@ -29,7 +38,10 @@
                       "You say: '%s'\n"
                       [(->> tail
                             (remove nil?)
-                            (words->line))])))
+                            (words->line))])
+    "logout" (->Response cmd subcmds tail "Logging out ...")
+    "login" (->Response cmd subcmds tail "Logging in with: %s" [tail])
+    "create" (->Response cmd subcmds tail "Creating: %s" [tail])))
 
 (defn error
   [cmd subcmds tail]

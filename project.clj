@@ -15,8 +15,13 @@
       :extend-notation true
       :print-meta true}}
   :profiles {
+    :ubercompile {
+      :aot :all}
     :test {
       :plugins [[lein-ltest "0.3.0"]]}}
   :aliases {
+    "ubercompile" ["do"
+      ["clean"]
+      ["with-profile" "+ubercompile" "compile"]]
     "ltest"
       ["with-profile" "+test" "ltest"]})
