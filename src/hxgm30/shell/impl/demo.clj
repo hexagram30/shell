@@ -24,7 +24,7 @@
 
 (defn parse
   [this request]
-  (parser/parse (grammar/grammars :demo)
+  (parser/parse :demo
                 (:disconnect-command this)
                 request))
 

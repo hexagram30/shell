@@ -36,9 +36,9 @@
                       subcmds
                       tail
                       "You say: '%s'\n"
-                      [(->> tail
+                      (->> tail
                             (remove nil?)
-                            (words->line))])
+                            (words->line)))
     "logout" (->Response cmd subcmds tail "Logging out ...")
     "login" (->Response cmd subcmds tail "Logging in with: %s" [tail])
     "create" (->Response cmd subcmds tail "Creating: %s" [tail])))
@@ -58,12 +58,14 @@
                 [cmd])))
 
 (defn parse
+  ([line]
+    (parse "logout" line))
   ([disconnect-command line]
-    (parse grammar/default-command-tree disconnect-command line))
-  ([command-grammar disconnect-command line]
+    (parse :default disconnect-command line))
+  ([grammar-key disconnect-command line]
     (let [args (line->words line)
-          [cmd & subcmds :as cmds] (grammar/get-commands command-grammar args)
-          tail (grammar/get-tail command-grammar args)]
-      (if (grammar/validate command-grammar args)
+          [cmd & subcmds :as cmds] (grammar/get-commands grammar-key args)
+          tail (grammar/get-tail grammar-key args)]
+      (if (grammar/validate grammar-key args)
         (dispatch disconnect-command cmd subcmds tail)
         (error cmd subcmds tail)))))

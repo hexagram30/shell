@@ -115,10 +115,10 @@
 (defn parse
   [this request]
   (if (subshell? this)
-    (parser/parse (grammar/grammars (subshell-type this))
+    (parser/parse (subshell-type this)
                   (:disconnect-command (subshell-instance this))
                   request)
-    (parser/parse (grammar/grammars :login)
+    (parser/parse :login
                   (:disconnect-command this)
                   request)))
 
