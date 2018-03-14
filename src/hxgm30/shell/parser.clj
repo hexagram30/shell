@@ -36,9 +36,9 @@
                       subcmds
                       tail
                       "You say: '%s'\n"
-                      (->> tail
+                      [(->> tail
                             (remove nil?)
-                            (words->line)))
+                            (words->line))])
     "logout" (->Response cmd subcmds tail "Logging out ...")
     "login" (->Response cmd subcmds tail "Logging in with: %s" [tail])
     "create" (->Response cmd subcmds tail "Creating: %s" [tail])))
