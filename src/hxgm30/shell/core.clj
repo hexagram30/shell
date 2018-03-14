@@ -51,20 +51,10 @@
     where the shell was initially created, usually a channel read in the Telnet
     application."))
 
-(defprotocol WithSubshellAPI
-  (not-subshell? [this])
-  (subshell? [this])
-  (subshell-disconnect-command [this])
-  (subshell-prompt [this]))
-
 (extend LoginShell
         ShellAPI
         (merge base/behaviour
                login/behaviour))
-
-(extend LoginShell
-        WithSubshellAPI
-        login/with-subshell-behaviour)
 
 (extend DemoShell
         ShellAPI
