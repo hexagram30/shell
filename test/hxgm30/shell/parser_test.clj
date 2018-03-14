@@ -14,8 +14,16 @@
 (def test-grammars
   {:tree1 test-command-tree1})
 
-(alter-var-root #'grammar/*grammars*
-                (constantly test-grammars))
+(defn grammar-fixture
+  [test-fn]
+  (let [orig-grammars (into {} grammar/*grammars*)]
+    (alter-var-root #'grammar/*grammars*
+                    (constantly test-grammars))
+    (test-fn)
+    (alter-var-root #'grammar/*grammars*
+                    (constantly orig-grammars))))
+
+(use-fixtures :once grammar-fixture)
 
 (deftest line->words
   (is (= ["ps"] (parser/line->words "ps")))
