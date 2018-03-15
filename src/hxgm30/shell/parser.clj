@@ -5,8 +5,7 @@
 
 (defrecord Request [
   data
-  grammar-key
-  disconnect-command])
+  grammar-key])
 
 (defrecord Response [
   command
@@ -28,10 +27,15 @@
 ;; XXX Each shell should have its own dispatcher, not one for all (too much
 ;;     possibility of collision)
 (defn dispatch
-  [disconnect-command cmd subcmds tail]
+  [cmd subcmds tail]
   (condp = cmd
     "" (->Response cmd subcmds nil "Please type something ...\n" nil)
-    disconnect-command (->Response cmd subcmds nil "Good-bye\n" nil)
+    ;; XXX We'll fix this redundancy problem once we have command dispatch
+    ;;     For now, though, this let's us not pass arbitrary command names
+    ;;     to the parser from the shell, which was circumventing the grammar
+    "bye" (->Response cmd subcmds nil "Good-bye\n" nil)
+    "logout" (->Response cmd subcmds nil "Good-bye\n" nil)
+    "QUIT" (->Response cmd subcmds nil "Good-bye\n" nil)
     "say" (->Response cmd
                       subcmds
                       tail
@@ -59,13 +63,11 @@
 
 (defn parse
   ([line]
-    (parse "logout" line))
-  ([disconnect-command line]
-    (parse :default disconnect-command line))
-  ([grammar-key disconnect-command line]
+    (parse :default line))
+  ([grammar-key line]
     (let [args (line->words line)
           [cmd & subcmds :as cmds] (grammar/get-commands grammar-key args)
           tail (grammar/get-tail grammar-key args)]
       (if (grammar/validate grammar-key args)
-        (dispatch disconnect-command cmd subcmds tail)
+        (dispatch cmd subcmds tail)
         (error cmd subcmds tail)))))

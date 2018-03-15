@@ -1,6 +1,7 @@
 (ns hxgm30.shell.impl.subshell
   (:require
-    [taoensso.timbre :as log]))
+    [taoensso.timbre :as log])
+(:refer-clojure :exclude [set! type]))
 
 (defrecord Subshell [
   type
