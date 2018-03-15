@@ -25,10 +25,10 @@
 
 (use-fixtures :once grammar-fixture)
 
-(deftest line->words
-  (is (= ["ps"] (parser/line->words "ps")))
-  (is (= ["ps" "aux"] (parser/line->words "ps aux")))
-  (is (= ["ls" "-al" "/tmp"] (parser/line->words "ls -al /tmp"))))
+(deftest tokenize
+  (is (= ["ps"] (parser/tokenize "ps")))
+  (is (= ["ps" "aux"] (parser/tokenize "ps aux")))
+  (is (= ["ls" "-al" "/tmp"] (parser/tokenize "ls -al /tmp"))))
 
 (deftest parse-true
   (let [result (parser/parse :tree1 "")]

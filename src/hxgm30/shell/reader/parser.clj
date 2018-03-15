@@ -4,12 +4,11 @@
     [hxgm30.shell.evaluator.core :as evaluator]
     [hxgm30.shell.reader.grammar :as grammar]))
 
-;; rename to tokenize
-(defn line->words
+(defn tokenize
   [line]
   (string/split line #"\s+"))
 
-(defn words->line
+(defn assemble
   [words]
   (string/join " " words))
 
@@ -17,7 +16,7 @@
   ([line]
     (parse :default line))
   ([grammar-key line]
-    (let [args (line->words line)
+    (let [args (tokenize line)
           [cmd & subcmds :as cmds] (grammar/get-commands grammar-key args)
           tail (grammar/get-tail grammar-key args)]
       (if (grammar/validate grammar-key args)
