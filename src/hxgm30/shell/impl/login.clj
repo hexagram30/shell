@@ -1,11 +1,11 @@
 (ns hxgm30.shell.impl.login
   (:require
     [clojure.java.io :as io]
-    [hxgm30.shell.grammar :as grammar]
     [hxgm30.shell.impl.base :as base]
     [hxgm30.shell.impl.demo :as demo]
     [hxgm30.shell.impl.subshell :as subshell]
-    [hxgm30.shell.parser :as parser]
+    [hxgm30.shell.reader.grammar :as grammar]
+    [hxgm30.shell.reader.parser :as parser]
     [taoensso.timbre :as log])
   (:refer-clojure :exclude [empty parse]))
 

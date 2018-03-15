@@ -1,7 +1,7 @@
-(ns hxgm30.shell.grammar-test
+(ns hxgm30.shell.reader.grammar-test
   (:require
     [clojure.test :refer :all]
-    [hxgm30.shell.grammar :as grammar]))
+    [hxgm30.shell.reader.grammar :as grammar]))
 
 (def test-command-tree1 {
   "bye" true})

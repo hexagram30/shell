@@ -1,9 +1,9 @@
-(ns hxgm30.shell.parser-test
+(ns hxgm30.shell.reader.parser-test
   (:require
     [clojure.string :as string]
     [clojure.test :refer :all]
-    [hxgm30.shell.grammar :as grammar]
-    [hxgm30.shell.parser :as parser]))
+    [hxgm30.shell.reader.grammar :as grammar]
+    [hxgm30.shell.reader.parser :as parser]))
 
 (def test-command-tree1
   {"" true

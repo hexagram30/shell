@@ -1,7 +1,6 @@
 (ns hxgm30.shell.impl.demo
   (:require
-    [hxgm30.shell.grammar :as grammar]
-    [hxgm30.shell.parser :as parser])
+    [hxgm30.shell.reader.parser :as parser])
   (:import
     (java.net InetAddress)
     (java.util Date))
@@ -10,10 +9,10 @@
 (defrecord DemoShell [
   grammar-type
   prompt
-  disconnect-command
-  disconnect-handler
   legal-subshells
-  active-subshell])
+  active-subshell
+  disconnect-command
+  disconnect-handler])
 
 (defn banner
   [this]

@@ -1,7 +1,7 @@
-(ns hxgm30.shell.parser
+(ns hxgm30.shell.reader.parser
   (:require
     [clojure.string :as string]
-    [hxgm30.shell.grammar :as grammar]))
+    [hxgm30.shell.reader.grammar :as grammar]))
 
 (defrecord Request [
   data

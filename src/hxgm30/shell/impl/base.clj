@@ -1,16 +1,16 @@
 (ns hxgm30.shell.impl.base
   (:require
-    [hxgm30.shell.parser :as parser]
+    [hxgm30.shell.reader.parser :as parser]
     [taoensso.timbre :as log])
   (:refer-clojure :exclude [empty parse]))
 
 (defrecord DefaultShell [
   grammar-type
   prompt
-  disconnect-command
-  disconnect-handler
   legal-subshells
-  active-subshell])
+  active-subshell
+  disconnect-command
+  disconnect-handler])
 
 (defn banner
   [this]
