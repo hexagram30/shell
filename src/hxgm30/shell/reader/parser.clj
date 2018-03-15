@@ -14,7 +14,7 @@
 
 (defn parse
   ([line]
-    (parse :default line))
+    (parse :login line))
   ([grammar-key line]
     (let [args (tokenize line)
           [cmd & subcmds :as cmds] (grammar/get-commands grammar-key args)

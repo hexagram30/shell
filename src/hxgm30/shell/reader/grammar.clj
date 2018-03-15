@@ -1,29 +1,17 @@
 (ns hxgm30.shell.reader.grammar)
 
-(def default-command-tree
-  {"" true
-   "bye" true
-   "say" {:depth 1
-          :any true}})
-
-(def login-command-tree
-  {"" true
-   "QUIT" true
-   "login" {:depth 1
-            :any true}
-   "create" {:depth 1
-             :any true}})
-
-(def demo-command-tree
-  {"" true
-   "logout" true
-   "say" {:depth 1
-          :any true}})
+(load "grammar/admin")
+(load "grammar/demo")
+(load "grammar/login")
+(load "grammar/player")
+(load "grammar/registration")
 
 (def ^:dynamic *grammars*
-  {:default default-command-tree
+  {:admin admin-command-tree
+   :demo demo-command-tree
    :login login-command-tree
-   :demo demo-command-tree})
+   :player player-command-tree
+   :registration registration-command-tree})
 
 (defn valid-child?
   [result]
