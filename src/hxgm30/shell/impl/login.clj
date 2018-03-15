@@ -1,6 +1,7 @@
 (ns hxgm30.shell.impl.login
   (:require
     [clojure.java.io :as io]
+    [hxgm30.shell.evaluator.core :as evaluator]
     [hxgm30.shell.impl.base :as base]
     [hxgm30.shell.impl.demo :as demo]
     [hxgm30.shell.impl.subshell :as subshell]
@@ -43,7 +44,7 @@
   ([this subshell-type]
     (create-subshell! this
                       subshell-type
-                      (parser/map->Response {:result-tmpl ""})))
+                      (evaluator/map->Response {:result-tmpl ""})))
   ([this subshell-type resp-msg]
     (let [subshell-opts {:disconnect-command "logout"
                          :prompt "\nsubshell> " ;; XXX promts need to be pulled from cfg
