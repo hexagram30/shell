@@ -28,6 +28,7 @@
     "say" (->Response cmd subcmds tail "You say: '%s'\n" [tail])
     "logout" (->Response cmd subcmds tail "Logging out ...")
     "login" (->Response cmd subcmds tail "Logging in with: %s" [tail])
+    "repl" (->Response cmd subcmds tail "Loading Clojure REPL ..." [tail])
     "create" (->Response cmd subcmds tail "Creating: %s" [tail])))
 
 (defn error

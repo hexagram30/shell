@@ -88,6 +88,10 @@
                (= "login" (:command response)))
           (create-subshell! this :demo resp-msg)
 
+          (and (subshell/not-active? this)
+               (= "repl" (:command response)))
+          (create-subshell! this :nrepl resp-msg)
+
           (and (subshell/active? this)
                (= (subshell/disconnect-command this) (:command response)))
           (disconnect-subshell! this resp-msg)

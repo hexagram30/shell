@@ -2,7 +2,8 @@
   (:require
     [hxgm30.shell.impl.base :as base]
     [hxgm30.shell.impl.demo :as demo]
-    [hxgm30.shell.impl.login :as login])
+    [hxgm30.shell.impl.login :as login]
+    [hxgm30.shell.impl.nrepl :as nrepl])
   (:import
     (hxgm30.shell.impl.login LoginShell)
     (hxgm30.shell.impl.demo DemoShell))
@@ -63,10 +64,11 @@
 
 (def shell-fns
   {:login login/create-shell
-   :demo demo/create-shell})
+   :demo demo/create-shell
+   :nrepl nrepl/create-shell})
 
 (def legal-subshells
-  {:login [:demo]
+  {:login [:demo :nrepl]
    :demo []})
 
 (defn get-legal-subshells
