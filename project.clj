@@ -22,6 +22,8 @@
     :url "http://www.apache.org/licenses/LICENSE-2.0"}
   :dependencies [
     [clojusc/twig "0.3.2"]
+    [clojusc/dev-system "0.1.0"]
+    [hexagram30/common "0.1.0-SNAPSHOT"]
     [org.clojure/clojure "1.8.0"]]
   :plugins [
     [venantius/ultra "0.5.2"]]
@@ -36,6 +38,7 @@
       :aot :all}
     :dev {
       :dependencies [
+        [clojusc/trifl "0.2.0"]
         [org.clojure/tools.namespace "0.2.11"]]
       :source-paths ["dev-resources/src"]
       :repl-options {

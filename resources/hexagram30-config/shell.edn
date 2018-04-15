@@ -1,0 +1,5 @@
+{:nrepl {
+   :port 1132}
+ :logging {
+   :level :debug
+   :nss [hxgm30]}}
