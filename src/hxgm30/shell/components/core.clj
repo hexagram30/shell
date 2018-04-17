@@ -24,21 +24,10 @@
            (nrepl/create-component)
            [:config :logging])})
 
-; (def mock-terminal
-;   {:terminal (component/using
-;               (terminal/create-component)
-;               [:config :logging])})
-
 (defn common
   [cfg-data]
   (merge (cfg cfg-data)
          log))
-
-(defn shell
-  [cfg-data]
-  (merge (common cfg-data)
-         ;mock-terminal
-         ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Component Initializations   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -50,11 +39,7 @@
       common
       component/map->SystemMap))
 
-(defn initialize
-  []
-  (-> (config/build-config)
-      shell
-      component/map->SystemMap))
+(def initialize initialize-bare-bones)
 
 (def init-lookup
   {:basic #'initialize-bare-bones

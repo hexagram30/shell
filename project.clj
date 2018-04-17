@@ -39,6 +39,7 @@
     :dev {
       :dependencies [
         [clojusc/trifl "0.2.0"]
+        [hexagram30/terminal "0.1.0-SNAPSHOT"]
         [org.clojure/tools.namespace "0.2.11"]]
       :source-paths ["dev-resources/src"]
       :repl-options {
@@ -57,6 +58,9 @@
     :test {
       :plugins [[lein-ltest "0.3.0"]]}}
   :aliases {
+    "repl" ["do"
+      ["clean"]
+      ["repl"]]
     "ubercompile" ["do"
       ["clean"]
       ["with-profile" "+ubercompile" "compile"]]
