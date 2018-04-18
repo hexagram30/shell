@@ -5,6 +5,14 @@
 [![][logo]][logo-large]
 
 
+## Flow
+
+A hexagram shell is intended to be used by a hexagram terminal. At the highest
+level, a shell is created and this instance is maintained throughout the life
+of the shell. The shell API may be used to perform actions associated with
+establishing a connection, receiving input, and closing a connection.
+
+
 ## Usage
 
 TBD
