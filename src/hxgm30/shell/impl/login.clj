@@ -15,6 +15,7 @@
   prompt
   legal-subshells
   active-subshell
+  banner-resource
   disconnect-command
   disconnect-handler])
 
@@ -24,21 +25,30 @@
 
 ;(defn ->request)
 
+(def default-banner "text/shell-login-banner.txt")
+
+(def default-prompt "\n> ")
+
+(def default-subshell-opts
+  {:disconnect-command "logout"
+   :prompt "\nsubshell> "})
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   ShellAPI   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defn get-prompt
+  [this]
+  (if (subshell/active? this)
+    (subshell/prompt this)
+    (or (:prompt this) default-prompt)))
 
 (defn render
   [this response]
   (let [result-tmpl (or (:result-tmpl response) "")
         result-args (remove nil? (:result-args response))
         args (vec (concat [result-tmpl] result-args))]
-    (str
-     (apply format args)
-     ;; XXX prompt rendering should probably have its own function
-     (if (subshell/active? this)
-       (or (subshell/prompt this) "")
-       (or (:prompt this) "\n> "))))) ;; XXX promts need to be pulled from cfg
+    (str (apply format args) (get-prompt this))))
 
 (defn create-subshell!
   ([this subshell-type]
@@ -46,10 +56,12 @@
                       subshell-type
                       (evaluator/map->Response {:result-tmpl ""})))
   ([this subshell-type resp-msg]
-    (let [subshell-opts {:disconnect-command "logout"
-                         :prompt "\nsubshell> " ;; XXX promts need to be pulled from cfg
-                         :type subshell-type}]
-      (subshell/set! this (subshell/create this subshell-opts)))
+    (create-subshell! this
+                      subshell-type
+                      resp-msg
+                      (assoc default-subshell-opts :type subshell-type)))
+  ([this subshell-type resp-msg subshell-opts]
+    (subshell/set! this (subshell/create this subshell-opts))
     (when-not (nil? resp-msg)
       (log/debug "resp-msg:" resp-msg)
       (render this (:response resp-msg)))
@@ -63,8 +75,7 @@
 
 (defn banner
   [this]
-  ;; XXX the file path for this should be pulled from configuration
-  (slurp (io/resource "text/shell-login-banner.txt")))
+  (slurp (io/resource (:banner-resource this))))
 
 (defn disconnect
   [this & args]
@@ -114,5 +125,6 @@
     (create-shell {}))
   ([opts]
     (map->LoginShell (merge {:disconnect-command "QUIT"
-                             :grammar-type :login}
+                             :grammar-type :login
+                             :banner-resource default-banner}
                             opts))))

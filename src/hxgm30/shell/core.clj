@@ -30,6 +30,8 @@
     field, calling it with `args`. This level of indrection is needed to work
     around the manner in which the Java netty.io API builds Telnet
     applications.")
+  (get-prompt [this]
+    "Return the shell prompt.")
   (parse [this request]
     "Parse a request message for further processing.
 

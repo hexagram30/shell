@@ -94,6 +94,7 @@
 (defn start-mock-terminal
   []
   (reset)
+  (ns-unalias (find-ns 'hxgm30.terminal.util.networkless) 'shell)
   (load "/hxgm30/terminal/util/networkless")
   (let [start-server (ns-resolve 'hxgm30.terminal.util.networkless 'start-server)]
     (start-server)))

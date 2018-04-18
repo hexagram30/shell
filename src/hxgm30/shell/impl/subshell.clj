@@ -7,6 +7,8 @@
   type
   instance])
 
+(def default-prompt " ")
+
 (defn create
   ([parent]
     (create parent {}))
@@ -39,7 +41,8 @@
 
 (defn prompt
   [parent]
-  (get-in @(:active-subshell parent) [:instance :prompt]))
+  (or (get-in @(:active-subshell parent) [:instance :prompt])
+      default-prompt))
 
 (defn type
   [parent]
