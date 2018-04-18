@@ -13,10 +13,10 @@
     "Return a string to be used as a banner. Optionally takes a data structure
     that implementations may use to customize presentation of banner.")
   (create-subshell! [this subshell-type]
-    "Create a new subshell that will be used to parse commands until the
-    subshell is exited.")
+    "Create a new subshell that will be used to parse commands until the user
+    is disconnected from the subshell.")
   (disconnect-subshell! [subshell-type]
-    "Nullifies the current active subshell.")
+    "Disconnect the user from the active subshell.")
   (disconnect [this & args]
     "Return string data for use in a final message to the client. Should be
     rendered just prior to actual disconnection.
@@ -31,25 +31,40 @@
     around the manner in which the Java netty.io API builds Telnet
     applications.")
   (parse [this request]
-    "The intended use of this function is to use an instantiation of a command
+    "Parse a request message for further processing.
+
+    The intended use of this function is to use an instantiation of a command
     parser to process the input from the user.
 
     While terminal implementations may choose to call this function directly,
-    it is recommended instead that such implementations use the
-    `handle-request` function instead. As such, shell implementations of the
-    `handle-request` function should call `parse`.")
+    it is recommended that such implementations use the `handle-request`
+    function instead. As such, shell implementations of the `handle-request`
+    function should call `parse`.")
   (render [this reponse]
     "Given the result of a parse, render it as a string suitable to be consumed
     by the client.")
   (handle-request [this request]
-    "This is the recommended function for handling request data in terminals.
+    "Perform full procesing on a request message.
+
+    This is the recommended function for handling request data in terminals.
     Additionally, implementations of this function should make calls to
     `disconnect`, `empty`, and `parse` as needed, assuring portability.")
-  (handle-disconnect [this response future]
-    "Use this method to check for a disconnect command and, if present,
-    dispatch the disconnect function. This is intended for use in the context
-    where the shell was initially created, usually a channel read in the Telnet
-    application."))
+  (handle-disconnect [this response data]
+    "Perform the defined action (stored in the `:disconnect-handler` field)
+    for a disconnect request.
+
+    Use this method to check for a disconnect command and, if present,
+    dispatch the disconnect function. This is intended for use by
+    implementations that don't have access to the connection-ending code where
+    messages are handled (such as Netty telnet applications).
+
+    The `response` argument is the result of making a call to `handle-request`;
+    as such, implementations of 'handle-request' may wish to call
+    `handle-disconnect` as well, before returning the response.
+
+    In the case of Netty telnet terminals, the `data` arguement
+    is a `future`; in the case of mock terminals, as that provided by
+    `hxgm30.terminal.util.networkless`, `data` is a `Handler` instance."))
 
 (extend LoginShell
         ShellAPI
