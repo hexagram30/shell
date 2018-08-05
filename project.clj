@@ -21,10 +21,10 @@
     :name "Apache License, Version 2.0"
     :url "http://www.apache.org/licenses/LICENSE-2.0"}
   :dependencies [
-    [clojusc/twig "0.3.2"]
+    [clojusc/twig "0.3.3"]
     [clojusc/dev-system "0.1.0"]
     [hexagram30/common "0.1.0-SNAPSHOT"]
-    [org.clojure/clojure "1.8.0"]]
+    [org.clojure/clojure "1.9.0"]]
   :plugins [
     [venantius/ultra "0.5.2"]]
   :ultra {
@@ -38,7 +38,7 @@
       :aot :all}
     :dev {
       :dependencies [
-        [clojusc/trifl "0.2.0"]
+        [clojusc/trifl "0.3.0"]
         [hexagram30/terminal "0.1.0-SNAPSHOT"]
         [org.clojure/tools.namespace "0.2.11"]]
       :source-paths ["dev-resources/src"]
@@ -50,7 +50,7 @@
       :source-paths ^:replace ["src"]
       :test-paths ^:replace []
       :plugins [
-        [jonase/eastwood "0.2.5"]
+        [jonase/eastwood "0.2.9"]
         [lein-ancient "0.6.15"]
         [lein-bikeshed "0.5.1"]
         [lein-kibit "0.1.6"]
