@@ -34,10 +34,11 @@ service's ["About" page][libera-about].
 
 ## License
 
-Copyright © 2018, Hexagram30
+```
+Copyright © 2018, Hexagram30 <hexagram30@cnbb.games>
 
 Apache License, Version 2.0
-
+```
 
 <!-- Named page links below: /-->
 
