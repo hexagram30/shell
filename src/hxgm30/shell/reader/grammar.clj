@@ -130,28 +130,38 @@
             :else
             subcmds))))
 
-;; XXX The following are going to have to be reworked/updated to support deeply
-;;     nested subcommands ...
+(defn subcommands-keys
+  [subcmds]
+  (interleave (repeat :subcommands) subcmds))
 
 (defn subcommand
-  [^Keyword shell ^Keyword cmd ^Keyword subcmd]
-  (get-in command-tree [shell :commands cmd :subcommands subcmd]))
+  [^Keyword shell ^Keyword cmd & subcmds]
+  (if (nil? subcmds)
+    (command-help shell cmd)
+    (get-in command-tree (concat [shell :commands cmd]
+                                 (subcommands-keys subcmds)))))
 
 (defn subcommand-help
-  [^Keyword shell ^Keyword cmd ^Keyword subcmd]
+  [^Keyword shell ^Keyword cmd & subcmds]
   (let [help-text (get-in command-tree
-                          [shell :commands cmd :subcommands subcmd :help])]
-    (if-let [help-fn (:help-fn (subcommand shell cmd subcmd))]
+                          (concat [shell :commands cmd]
+                                  (subcommands-keys subcmds)
+                                  [:help]))]
+    (if-let [help-fn (:help-fn (apply subcommand
+                                      (concat [shell cmd]
+                                              (subcommands-keys subcmds))))]
       (str help-text (help-fn))
       help-text)))
 
 (defn subcommand-fn
-  [^Keyword shell ^Keyword cmd ^Keyword subcmd]
+  [^Keyword shell ^Keyword cmd & subcmds]
   (get-in command-tree
-          [shell :commands cmd :subcommands subcmd :fn]))
+          (concat [shell :commands cmd]
+                  (subcommands-keys subcmds)
+                  [:fn])))
 
 (defn callable?
-  ([^Keyword shell ^Keyword cmd]
+  [^Keyword shell ^Keyword cmd & subcmds]
+  (if (nil? subcmds)
     (not (nil? (command-fn shell cmd))))
-  ([^Keyword shell ^Keyword cmd ^Keyword subcmd]
-    (not (nil? (subcommand-fn shell cmd subcmd)))))
+    (not (nil? (apply subcommand-fn (concat [shell cmd] subcmds)))))
