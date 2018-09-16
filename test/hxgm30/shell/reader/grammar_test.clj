@@ -197,19 +197,25 @@
 ;                            ["cmd2" "subcmd" "the" "rest" "is" "ignored"]))))
 
 (deftest commands
-  (is (= [:login :register :reset]
+  (is (= [:help :login :register :reset]
          (sort (keys (grammar/commands :entry)))))
-  (is (= [:login :register :reset]
+  (is (= [:help :login :register :reset]
          (sort (grammar/commands :entry {:as-keys true})))))
 
 (deftest command
-  (is (= {:help "Create a user account"
+  (is (= {:help (str "Create a user account. Takes one argument, the user name. "
+                     "The user will then be prompted to enter a password.")
           :fn #'hxgm30.registration.components.registrar/create-user}
          (grammar/command :entry :register)))
-  (is (= "Perform one or more type of account results."
+  (is (= "Perform one or more type of account resets."
          (grammar/command-help :entry :reset)))
   (is (= #'hxgm30.registration.components.registrar/create-user
          (grammar/command-fn :entry :register))))
+
+(deftest has-subcommands?
+  (is (not (grammar/has-subcommands? :entry :login)))
+  (is (not (grammar/has-subcommands? :entry :register)))
+  (is (grammar/has-subcommands? :entry :reset)))
 
 (deftest subcommands
   (is (= [:password :player-key]

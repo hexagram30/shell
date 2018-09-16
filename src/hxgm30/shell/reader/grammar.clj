@@ -90,36 +90,41 @@
         cmds))))
 
 (defn command
-  [^Keyword shell ^Keyword command]
-  (get-in command-tree [shell :commands command]))
+  [^Keyword shell ^Keyword cmd]
+  (get-in command-tree [shell :commands cmd]))
 
 (defn command-help
-  [^Keyword shell ^Keyword command]
-  (get-in command-tree [shell :commands command :help]))
+  [^Keyword shell ^Keyword cmd]
+  (get-in command-tree [shell :commands cmd :help]))
 
 (defn command-fn
-  [^Keyword shell ^Keyword command]
-  (get-in command-tree [shell :commands command :fn]))
+  [^Keyword shell ^Keyword cmd]
+  (get-in command-tree [shell :commands cmd :fn]))
+
+(defn has-subcommands?
+  [^Keyword shell ^Keyword cmd]
+  (let [cmd-data (command shell cmd)]
+    (not (nil? (:subcommands cmd-data)))))
 
 (defn subcommands
-  ([^Keyword shell ^Keyword command]
-    (subcommands shell command {}))
-  ([^Keyword shell ^Keyword command opts]
-    (let [subcmds (get-in command-tree [shell :commands command :subcommands])]
+  ([^Keyword shell ^Keyword cmd]
+    (subcommands shell cmd {}))
+  ([^Keyword shell ^Keyword cmd opts]
+    (let [subcmds (get-in command-tree [shell :commands cmd :subcommands])]
       (if (:as-keys opts)
         (keys subcmds)
         subcmds))))
 
 (defn subcommand
-  [^Keyword shell ^Keyword command ^Keyword subcommand]
-  (get-in command-tree [shell :commands command :subcommands subcommand]))
+  [^Keyword shell ^Keyword cmd ^Keyword subcmd]
+  (get-in command-tree [shell :commands cmd :subcommands subcmd]))
 
 (defn subcommand-help
-  [^Keyword shell ^Keyword command ^Keyword subcommand]
+  [^Keyword shell ^Keyword cmd ^Keyword subcmd]
   (get-in command-tree
-          [shell :commands command :subcommands subcommand :help]))
+          [shell :commands cmd :subcommands subcmd :help]))
 
 (defn subcommand-fn
-  [^Keyword shell ^Keyword command ^Keyword subcommand]
+  [^Keyword shell ^Keyword cmd ^Keyword subcmd]
   (get-in command-tree
-          [shell :commands command :subcommands subcommand :fn]))
+          [shell :commands cmd :subcommands subcmd :fn]))
