@@ -1,5 +1,6 @@
 (ns hxgm30.shell.reader.grammar
   (:require
+    [clojure.string :as string]
     [hxgm30.registration.components.registrar])
   (:import
     (clojure.lang Keyword)))
@@ -97,6 +98,14 @@
   [^Keyword shell ^Keyword cmd]
   (get-in command-tree [shell :commands cmd :help]))
 
+(defn command-help
+  [^Keyword shell ^Keyword cmd]
+  (let [help-text (get-in command-tree
+                          [shell :commands cmd :help])]
+    (if-let [help-fn (:help-fn (command shell cmd))]
+      (str help-text (help-fn))
+      help-text)))
+
 (defn command-fn
   [^Keyword shell ^Keyword cmd]
   (get-in command-tree [shell :commands cmd :fn]))
@@ -111,9 +120,18 @@
     (subcommands shell cmd {}))
   ([^Keyword shell ^Keyword cmd opts]
     (let [subcmds (get-in command-tree [shell :commands cmd :subcommands])]
-      (if (:as-keys opts)
-        (keys subcmds)
-        subcmds))))
+      (cond (true? (:as-keys opts))
+            (keys subcmds)
+
+            (true? (:comma-separated opts))
+            (string/join ", "
+                         (map name (keys subcmds)))
+
+            :else
+            subcmds))))
+
+;; XXX The following are going to have to be reworked/updated to support deeply
+;;     nested subcommands ...
 
 (defn subcommand
   [^Keyword shell ^Keyword cmd ^Keyword subcmd]
@@ -121,10 +139,19 @@
 
 (defn subcommand-help
   [^Keyword shell ^Keyword cmd ^Keyword subcmd]
-  (get-in command-tree
-          [shell :commands cmd :subcommands subcmd :help]))
+  (let [help-text (get-in command-tree
+                          [shell :commands cmd :subcommands subcmd :help])]
+    (if-let [help-fn (:help-fn (subcommand shell cmd subcmd))]
+      (str help-text (help-fn))
+      help-text)))
 
 (defn subcommand-fn
   [^Keyword shell ^Keyword cmd ^Keyword subcmd]
   (get-in command-tree
           [shell :commands cmd :subcommands subcmd :fn]))
+
+(defn callable?
+  ([^Keyword shell ^Keyword cmd]
+    (not (nil? (command-fn shell cmd))))
+  ([^Keyword shell ^Keyword cmd ^Keyword subcmd]
+    (not (nil? (subcommand-fn shell cmd subcmd)))))

@@ -207,10 +207,23 @@
                      "The user will then be prompted to enter a password.")
           :fn #'hxgm30.registration.components.registrar/create-user}
          (grammar/command :entry :register)))
-  (is (= "Perform one or more type of account resets."
-         (grammar/command-help :entry :reset)))
+
   (is (= #'hxgm30.registration.components.registrar/create-user
          (grammar/command-fn :entry :register))))
+
+(deftest command-help
+  (is (= (str "Perform one or more type of account resets.\n\nSupported "
+              "subcommands: password, player-key")
+         (grammar/command-help :entry :reset)))
+  (is (= (str "Log in to a game instance on the server. Takes two arguments: "
+              "the user name and the game instance to join. The user will "
+              "then be prompted to enter their password.\n\nSupported game "
+              "instances: :not-implemented")
+         (grammar/command-help :entry :login))))
+
+(deftest login-fn
+  (is (= :not-implemented
+         ((grammar/command-fn :entry :login)))))
 
 (deftest has-subcommands?
   (is (not (grammar/has-subcommands? :entry :login)))
@@ -220,8 +233,10 @@
 (deftest subcommands
   (is (= [:password :player-key]
          (sort (keys (grammar/subcommands :entry :reset)))))
-    (is (= [:password :player-key]
-         (sort (grammar/subcommands :entry :reset {:as-keys true})))))
+  (is (= [:password :player-key]
+       (sort (grammar/subcommands :entry :reset {:as-keys true}))))
+  (is (= "password, player-key"
+       (grammar/subcommands :entry :reset {:comma-separated true}))))
 
 (deftest subcommand
   (is (= {:help "Reset the password for a given account."
@@ -231,3 +246,11 @@
          (grammar/subcommand-help :entry :reset :player-key)))
   (is (= #'hxgm30.registration.components.registrar/reset-player-key
          (grammar/subcommand-fn :entry :reset :player-key))))
+
+(deftest callable?
+  (is (grammar/callable? :entry :login))
+  (is (grammar/callable? :entry :register))
+  (is (grammar/callable? :entry :reset :password))
+  (is (grammar/callable? :entry :reset :player-key))
+  (is (not (grammar/callable? :entry :help)))
+  (is (not (grammar/callable? :entry :reset))))
