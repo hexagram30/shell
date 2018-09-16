@@ -4,6 +4,7 @@
     [hxgm30.shell.components.config :as config]
     [hxgm30.shell.components.logging :as logging]
     [hxgm30.shell.components.nrepl :as nrepl]
+    [hxgm30.shell.components.registry :as registry]
     [taoensso.timbre :as log]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

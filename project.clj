@@ -24,6 +24,7 @@
     [clojusc/system-manager "0.3.0-SNAPSHOT"]
     [clojusc/twig "0.3.3"]
     [hexagram30/common "0.1.0-SNAPSHOT"]
+    [hexagram30/registration "0.1.0-SNAPSHOT"]
     [org.clojure/clojure "1.9.0"]]
   :plugins [
     [venantius/ultra "0.5.2"]]
