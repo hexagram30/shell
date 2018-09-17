@@ -25,10 +25,11 @@
 
 ; (use-fixtures :once grammar-fixture)
 
-; (deftest tokenize
-;   (is (= ["ps"] (parser/tokenize "ps")))
-;   (is (= ["ps" "aux"] (parser/tokenize "ps aux")))
-;   (is (= ["ls" "-al" "/tmp"] (parser/tokenize "ls -al /tmp"))))
+(deftest tokenize
+  (is (= [:shell nil] (parser/tokenize "shell")))
+  (is (= [:shell :cmd] (parser/tokenize "shell cmd")))
+  (is (= [:shell :cmd "subcmd1"] (parser/tokenize "shell cmd subcmd1")))
+  (is (= [:shell :cmd "subcmd1" "subcmd2"] (parser/tokenize "shell cmd subcmd1 subcmd2"))))
 
 ; (deftest parse-true
 ;   (let [result (parser/parse :tree1 "")]

@@ -6,7 +6,11 @@
 
 (defn tokenize
   [line]
-  (string/split line #"\s+"))
+  (let [[str-shell str-cmd & rest-strs] (string/split line #"\s+")
+        shell (keyword str-shell)
+        cmd (keyword str-cmd)]
+    (concat [shell cmd] rest-strs)))
+
 
 (defn assemble
   [words]
@@ -14,11 +18,8 @@
 
 (defn parse
   ([line]
-    (parse :login line))
-  ([grammar-key line]
-    (let [args (tokenize line)
-          [cmd & subcmds :as cmds] (grammar/get-commands grammar-key args)
-          tail (grammar/get-tail grammar-key args)]
-      (if (grammar/validate grammar-key args)
-        (evaluator/dispatch grammar-key cmd subcmds tail)
-        (evaluator/error grammar-key cmd subcmds tail)))))
+    (apply parse (tokenize line)))
+  ([shell cmd & args]
+    (println "shell: " shell)
+    (println "cmd: " cmd)
+    (println "args: " args)))

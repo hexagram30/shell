@@ -81,6 +81,10 @@
     entry-command-tree
     {}))
 
+(defn has-shell?
+  [^Keyword shell]
+  (not (nil? (shell command-tree))))
+
 (defn commands
   ([^Keyword shell]
     (commands shell {}))
@@ -89,6 +93,10 @@
       (if (:as-keys opts)
         (keys cmds)
         cmds))))
+
+(defn has-command?
+  [^Keyword shell ^Keyword cmd]
+  (not (nil? (cmd (commands shell)))))
 
 (defn command
   [^Keyword shell ^Keyword cmd]
@@ -132,33 +140,30 @@
 
 (defn subcommands-keys
   [subcmds]
-  (interleave (repeat :subcommands) subcmds))
+  (interleave (repeat :subcommands) (map keyword subcmds)))
+
+(defn keys->subcommand
+  [^Keyword shell ^Keyword cmd subcmds]
+  (get-in command-tree
+          (concat [shell :commands cmd] (subcommands-keys subcmds))))
 
 (defn subcommand
   [^Keyword shell ^Keyword cmd & subcmds]
   (if (nil? subcmds)
     (command-help shell cmd)
-    (get-in command-tree (concat [shell :commands cmd]
-                                 (subcommands-keys subcmds)))))
+    (keys->subcommand shell cmd subcmds)))
 
 (defn subcommand-help
   [^Keyword shell ^Keyword cmd & subcmds]
-  (let [help-text (get-in command-tree
-                          (concat [shell :commands cmd]
-                                  (subcommands-keys subcmds)
-                                  [:help]))]
-    (if-let [help-fn (:help-fn (apply subcommand
-                                      (concat [shell cmd]
-                                              (subcommands-keys subcmds))))]
+  (let [subcmd-data (keys->subcommand shell cmd subcmds)
+        help-text (:help subcmd-data)]
+    (if-let [help-fn (:help-fn subcmd-data)]
       (str help-text (help-fn))
       help-text)))
 
 (defn subcommand-fn
   [^Keyword shell ^Keyword cmd & subcmds]
-  (get-in command-tree
-          (concat [shell :commands cmd]
-                  (subcommands-keys subcmds)
-                  [:fn])))
+  (:fn (keys->subcommand shell cmd subcmds)))
 
 (defn callable?
   [^Keyword shell ^Keyword cmd & subcmds]

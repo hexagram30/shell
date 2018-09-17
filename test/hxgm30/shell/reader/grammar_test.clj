@@ -196,11 +196,20 @@
 ;          (grammar/validate :tree3
 ;                            ["cmd2" "subcmd" "the" "rest" "is" "ignored"]))))
 
+(deftest has-shell?
+  (is (grammar/has-shell? :entry))
+  (is (not (grammar/has-shell? :quux))))
+
 (deftest commands
   (is (= [:help :login :register :reset]
          (sort (keys (grammar/commands :entry)))))
   (is (= [:help :login :register :reset]
          (sort (grammar/commands :entry {:as-keys true})))))
+
+(deftest has-command?
+  (is (grammar/has-command? :entry :login))
+  (is (not (grammar/has-command? :entry :blurf)))
+  (is (not (grammar/has-command? :quux :xyzzy))))
 
 (deftest command
   (is (= {:help (str "Create a user account. Takes one argument, the user name. "
@@ -237,6 +246,15 @@
        (sort (grammar/subcommands :entry :reset {:as-keys true}))))
   (is (= "password, player-key"
        (grammar/subcommands :entry :reset {:comma-separated true}))))
+
+(deftest subcommands-keys
+  (is (= [:subcommands :subcmd1 :subcommands :subcmd2 :subcommands :subcmd3]
+         (grammar/subcommands-keys ["subcmd1" "subcmd2" "subcmd3"]))))
+
+(deftest keys->subcommand
+  (is (= {:help "Reset the password for a given account."
+          :fn #'hxgm30.registration.components.registrar/reset-password}
+         (grammar/keys->subcommand :entry :reset ["password"]))))
 
 (deftest subcommand
   (is (= {:help "Reset the password for a given account."
