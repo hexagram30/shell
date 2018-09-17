@@ -168,5 +168,6 @@
 (defn callable?
   [^Keyword shell ^Keyword cmd & subcmds]
   (if (nil? subcmds)
-    (not (nil? (command-fn shell cmd))))
-    (not (nil? (apply subcommand-fn (concat [shell cmd] subcmds)))))
+    (not (nil? (command-fn shell cmd)))
+    (not (nil? (apply subcommand-fn (concat [shell cmd] subcmds))))))
+
