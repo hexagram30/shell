@@ -248,27 +248,37 @@
        (grammar/subcommands :entry :reset {:comma-separated true}))))
 
 (deftest subcommands-keys
+  (is (= []
+         (grammar/subcommands-keys nil)))
+  (is (= []
+         (grammar/subcommands-keys [])))
+  (is (= [:subcommands :subcmd]
+         (grammar/subcommands-keys ["subcmd"])))
   (is (= [:subcommands :subcmd1 :subcommands :subcmd2 :subcommands :subcmd3]
          (grammar/subcommands-keys ["subcmd1" "subcmd2" "subcmd3"]))))
 
 (deftest keys->subcommand
   (is (= {:help "Reset the password for a given account."
           :fn #'hxgm30.registration.components.registrar/reset-password}
-         (grammar/keys->subcommand :entry :reset ["password"]))))
+         (grammar/keys->subcommand :entry :reset ["password"])))
+  (is (not
+        (nil? (grammar/keys->subcommand :entry :login []))))
+  (is (nil? (grammar/keys->subcommand :entry :login ["user"])))
+  (is (nil? (grammar/keys->subcommand :entry :login ["user" "world"]))))
 
 (deftest subcommand
   (is (= {:help "Reset the password for a given account."
           :fn #'hxgm30.registration.components.registrar/reset-password}
-         (grammar/subcommand :entry :reset :password)))
+         (grammar/subcommand :entry :reset [:password])))
   (is (= "Reset the player key for a given account."
-         (grammar/subcommand-help :entry :reset :player-key)))
+         (grammar/subcommand-help :entry :reset [:player-key])))
   (is (= #'hxgm30.registration.components.registrar/reset-player-key
-         (grammar/subcommand-fn :entry :reset :player-key))))
+         (grammar/subcommand-fn :entry :reset [:player-key]))))
 
 (deftest callable?
   (is (grammar/callable? :entry :login))
   (is (grammar/callable? :entry :register))
-  (is (grammar/callable? :entry :reset :password))
-  (is (grammar/callable? :entry :reset :player-key))
+  (is (grammar/callable? :entry :reset [:password]))
+  (is (grammar/callable? :entry :reset [:player-key]))
   (is (not (grammar/callable? :entry :help)))
   (is (not (grammar/callable? :entry :reset))))
