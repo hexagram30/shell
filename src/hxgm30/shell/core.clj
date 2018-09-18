@@ -121,10 +121,10 @@
         ShellAPI
         entry/behaviour)
 
-(defn create-shell
+(defn create
   ([^Keyword shell-type]
-    (create-shell shell-type {}))
+    (create shell-type {}))
   ([^Keyword shell-type opts]
     (case shell-type
-      :entry (entry/create-shell opts)
+      :entry (entry/create opts)
       :unsupprted-shell)))

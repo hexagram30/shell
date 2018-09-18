@@ -1,6 +1,7 @@
 (ns hxgm30.shell.components.registry
   (:require
    [hxgm30.shell.config :as shell-config]
+   [hxgm30.shell.core :as shell]
    [com.stuartsierra.component :as component]
    [taoensso.timbre :as log]))
 
@@ -20,25 +21,25 @@
 ;;;   Component Lifecycle Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defrecord Registry [data])
+(defrecord ShellRegistry [registry])
 
 (defn start
   [this]
   (log/info "Starting shell registry component ...")
   (log/debug "Started shell registry component.")
-  (assoc :entry this))
+  (assoc-in this [:registry :entry] (shell/create :entry)))
 
 (defn stop
   [this]
   (log/info "Stopping shell registry component ...")
   (log/debug "Stopped shell registry component.")
-  (assoc this :data nil))
+  (assoc this :registry nil))
 
 (def lifecycle-behaviour
   {:start start
    :stop stop})
 
-(extend Registry
+(extend ShellRegistry
   component/Lifecycle
   lifecycle-behaviour)
 
@@ -48,5 +49,5 @@
 
 (defn create-component
   ""
-  [cfg-data]
-  (map->Registry {:data cfg-data}))
+  []
+  (map->ShellRegistry {}))

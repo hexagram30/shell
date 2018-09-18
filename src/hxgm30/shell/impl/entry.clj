@@ -84,9 +84,9 @@
    :handle-disconnect base/handle-disconnect
    :handle-request handle-request})
 
-(defn create-shell
+(defn create
   ([]
-    (create-shell {}))
+    (create {}))
   ([opts]
     (map->EntryShell {:options opts
                       :disconnect-command "quit"
