@@ -35,7 +35,7 @@
 
 (defn parse
   ([line]
-    (tokenize grammar/command-tree line))
+    (parse grammar/command-tree line))
   ([cmd-tree line]
     (let [[str-shell str-cmd & rest-strs] (tokenize line)
           shell (keyword str-shell)

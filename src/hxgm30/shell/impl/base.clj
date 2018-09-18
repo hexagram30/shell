@@ -27,9 +27,9 @@
 (defn render
   [this response]
   (str
-   (apply format (concat [(:result-tmpl response)]
-                         (:result-args response)))
-   (or (:prompt this) "")))
+    (apply format (concat [(:result-tmpl response)]
+                          (:result-args response)))
+    (or (:prompt this) "")))
 
 (defn handle-request
   [this request]
@@ -39,8 +39,9 @@
 
 (defn handle-disconnect
   [this response future]
-  (when (= (:disconnect-command this) (:command response))
-    (disconnect this future)))
+  (if (= (:disconnect-command this) (:command response))
+    (disconnect this future)
+    (log/debug "Disconnect command not passed; continuing ...")))
 
 (def behaviour
   {:banner banner

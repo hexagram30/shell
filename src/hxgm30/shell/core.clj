@@ -10,7 +10,7 @@
     (hxgm30.shell.impl.entry EntryShell)
     ; (hxgm30.shell.impl.login LoginShell)
     )
-  (:refer-clojure :exclude [empty parse]))
+  (:refer-clojure :exclude [print read]))
 
 ; (defprotocol ShellAPI
 ;   (banner [this] [this data]
@@ -105,12 +105,26 @@
 ;                         :active-subshell (atom nil)}
 ;                        opts)))))
 
-
 (defprotocol ShellAPI
-  )
+  (banner [this])
+  (motd [this])
+  (connect-help [this])
+  (on-connect [this])
+  (read [this line])
+  (evaluate [this parsed])
+  (print [this evaled])
+  (prompt [this])
+  (handle-disconnect [this response future])
+  (handle-request [this line]))
+
+(extend EntryShell
+        ShellAPI
+        entry/behaviour)
 
 (defn create-shell
-  [^Keyword shell-type]
-  (case shell-type
-    :entry (entry/create-shell)
-    :unsupprted-shell))
+  ([^Keyword shell-type]
+    (create-shell shell-type {}))
+  ([^Keyword shell-type opts]
+    (case shell-type
+      :entry (entry/create-shell opts)
+      :unsupprted-shell)))

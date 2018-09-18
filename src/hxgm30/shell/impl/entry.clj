@@ -1,55 +1,93 @@
 (ns hxgm30.shell.impl.entry
   (:require
-    [hxgm30.shell.reader.parser :as parser])
+    [clojure.java.io :as io]
+    [hxgm30.common.util :as util]
+    [hxgm30.shell.impl.base :as base]
+    [hxgm30.shell.reader.parser :as reader]
+    [taoensso.timbre :as log])
   (:import
     (java.net InetAddress)
     (java.util Date))
-  (:refer-clojure :exclude [empty parse]))
+  (:refer-clojure :exclude [empty read print]))
 
 (defrecord EntryShell [
-  grammar-type
-  prompt
-  legal-subshells
-  active-subshell
+  disconnect-handler
   disconnect-command
-  disconnect-handler])
+  options])
+
+(defn prompt
+  [this]
+  "\r\nentry> ")
 
 (defn banner
   [this]
-  (str "Welcome to "
+  (str "\r\nWelcome to"
+       (slurp (io/resource "text/banner.txt"))
+       "\r\nRunning on "
        (.getHostName (InetAddress/getLocalHost))
-       "!\r\n"
-       "It is "  (new Date) " now.\r\n"))
+       "\r\n"
+       "Current server time: " (new Date) "\r\n"))
 
-(defn parse
-  [this request]
-  (parser/parse :demo
-                (:disconnect-command this)
-                request))
+(defn motd
+  [this]
+  (str "You have connected to the top-level shell of a Hexagram 30 server. "
+       "If you don't have a user account, can can regsiter to create one; "
+       "if you do, you may create a new playing character or log in to the "
+       "game world of your choice with a character you have already created."))
 
-(defn render
-  [this response]
-  (str
-   (apply format (concat [(:result-tmpl response)]
-                         (:result-args response)))
-   ))
+(defn connect-help
+  [this]
+  (str "To see a list of commands, type 'commands'; for help on any of the "
+       "commands, type 'help <command name>'. To get help on a command's "
+       "subcommand, 'help <command name> <subcommand name>', etc."))
+
+(defn on-connect
+  [this]
+  (str (banner this)
+       "\r\n"
+       (util/wrap-paragraph (motd this) 76 4)
+       (util/wrap-paragraph (connect-help this) 76 4)
+       "\r\n"))
+
+(defn read
+  [this line]
+  (log/debug "Reading command ...")
+  (reader/parse (str "entry" \space line)))
+
+(defn evaluate
+  [this parsed]
+  (log/debug "Evaluating command ...")
+  parsed)
+
+(defn print
+  [this evaled]
+  (log/debug "Printing evaluated result ...")
+  evaled)
 
 (defn handle-request
-  [this request]
-  (let [response (parse this request)]
-    {:response response
-     :message (render this response)}))
+  [this line]
+  (print
+    this
+    (evaluate
+      this
+      (read this line))))
 
 (def behaviour
   {:banner banner
-   :parse parse
-   :render render
+   :motd motd
+   :connect-help connect-help
+   :on-connect on-connect
+   :read read
+   :evaluate evaluate
+   :print print
+   :prompt prompt
+   :handle-disconnect base/handle-disconnect
    :handle-request handle-request})
 
 (defn create-shell
   ([]
     (create-shell {}))
   ([opts]
-    (map->EntryShell (merge {:disconnect-command "bye"
-                             :grammar-type :demo}
-                            opts))))
+    (map->EntryShell {:options opts
+                      :disconnect-command "quit"
+                      :disconnect-handler (:disconnect-handler opts)})))
