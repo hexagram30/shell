@@ -201,9 +201,9 @@
   (is (not (grammar/has-shell? :quux))))
 
 (deftest commands
-  (is (= [:help :login :register :reset]
+  (is (= [:commands :help :login :register :reset]
          (sort (keys (grammar/commands :entry)))))
-  (is (= [:help :login :register :reset]
+  (is (= [:commands :help :login :register :reset]
          (sort (grammar/commands :entry {:as-keys true})))))
 
 (deftest has-command?
