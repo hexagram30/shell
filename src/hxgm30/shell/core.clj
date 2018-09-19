@@ -29,7 +29,7 @@
 
     This function is not intended to be used alone, but rather as part of the
     classic read-evaluate-print chain; see handle-line.")
-  (print [this evaled]
+  (print [this evaled] [this parsed evaled]
     "After a command has been read and evaluated, it's ready to print. While
     this method isn't responsible for actual printing (that's the domain of
     the component which manages the communication between client and server,

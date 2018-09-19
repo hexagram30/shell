@@ -1,19 +1,45 @@
 (ns hxgm30.shell.impl.entry
   (:require
     [clojure.java.io :as io]
+    [clojure.string :as string]
     [hxgm30.common.util :as util]
     [hxgm30.shell.impl.base :as base]
+    [hxgm30.shell.reader.grammar :as grammar]
     [hxgm30.shell.reader.parser :as reader]
     [taoensso.timbre :as log])
   (:import
     (java.net InetAddress)
     (java.util Date))
-  (:refer-clojure :exclude [empty read print]))
+  (:refer-clojure :exclude [read print]))
 
 (defrecord EntryShell [
-  disconnect-handler
   disconnect-command
+  grammar
   options])
+
+(def text-indent 4)
+(def list-indent 8)
+(def new-line "\r\n")
+
+(def commands-with-list-output #{:commands})
+
+(defn indent
+  ([]
+    (indent text-indent))
+  ([spaces]
+    (repeat spaces \space)))
+
+(defn print-list-item
+  [list-item]
+  [new-line (indent list-indent) list-item])
+
+(defn print-list-items
+  [help-text list-items]
+  (string/join
+    ""
+    (flatten [new-line (indent) help-text new-line
+             (map print-list-item list-items)
+             new-line])))
 
 (defn prompt
   [this]
@@ -21,12 +47,16 @@
 
 (defn banner
   [this]
-  (str "\r\nWelcome to"
+  (str new-line
+       "Welcome to"
        (slurp (io/resource "text/banner.txt"))
-       "\r\nRunning on "
+       new-line
+       "Running on "
        (.getHostName (InetAddress/getLocalHost))
-       "\r\n"
-       "Current server time: " (new Date) "\r\n"))
+       new-line
+       "Current server time: "
+       (new Date)
+       new-line))
 
 (defn motd
   [this]
@@ -44,10 +74,10 @@
 (defn on-connect
   [this]
   (str (banner this)
-       "\r\n"
-       (util/wrap-paragraph (motd this) 76 4)
-       (util/wrap-paragraph (connect-help this) 76 4)
-       "\r\n"))
+       new-line
+       (util/wrap-paragraph (motd this) 76 text-indent)
+       (util/wrap-paragraph (connect-help this) 76 text-indent)
+       new-line))
 
 (defn read
   [this line]
@@ -55,22 +85,34 @@
   (reader/parse (str "entry" \space line)))
 
 (defn evaluate
-  [this parsed]
+  [this {:keys [cmd] :as parsed}]
   (log/debug "Evaluating command ...")
-  parsed)
+  (cond (= :commands cmd)
+        (map name (keys (get-in this [:grammar :commands])))
+
+        :else
+        parsed))
 
 (defn print
-  [this evaled]
-  (log/debug "Printing evaluated result ...")
-  evaled)
+  ([this evaled]
+    (log/debug "Printing evaluated result ...")
+    evaled)
+  ([this {cmd :cmd} evaled]
+    (log/debug "Printing evaluated result ...")
+    (cond (= :commands cmd)
+          (print-list-items
+            "Available commands:"
+            evaled)
+
+          :else
+          evaled)))
 
 (defn handle-line
   [this line]
-  (print
-    this
-    (evaluate
-      this
-      (read this line))))
+  (->> line
+       (read this)
+       (evaluate this)
+       (print this)))
 
 (def behaviour
   {:banner banner
@@ -88,5 +130,6 @@
   ([]
     (create {}))
   ([opts]
-    (map->EntryShell {:options opts
-                      :disconnect-command :quit})))
+    (map->EntryShell (merge base/default-options
+                            {:grammar (:entry grammar/command-tree)
+                             :options opts}))))

@@ -6,6 +6,8 @@
   {:entry {
      :help "Top-level commands available upon connection to the server."
      :commands {
+       :commands {
+         :help (str "List the commands available.")}
        :help {
          :help (str "Get the documentation for supported commands and any of "
                     "their subcommands. Usage is of the following form: "

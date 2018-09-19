@@ -23,3 +23,5 @@
   {:banner banner
    :disconnect? disconnect?
    :parse parse})
+
+(def default-options {:disconnect-command :quit})
