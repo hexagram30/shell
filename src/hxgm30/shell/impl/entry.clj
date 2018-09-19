@@ -18,9 +18,9 @@
   options])
 
 (def text-indent 4)
-(def list-indent 8)
+(def list-indent 12)
 (def new-line "\r\n")
-
+(def no-help "")
 (def commands-with-list-output #{:commands})
 
 (defn indent
@@ -34,12 +34,14 @@
   [new-line (indent list-indent) list-item])
 
 (defn print-list-items
-  [help-text list-items]
-  (string/join
-    ""
-    (flatten [new-line (indent) help-text new-line
-             (map print-list-item list-items)
-             new-line])))
+  ([list-items]
+    (print-list-items "" list-items))
+  ([help-text list-items]
+    (string/join
+      ""
+      (flatten [(indent) help-text
+               (map print-list-item list-items)
+               new-line]))))
 
 (defn prompt
   [this]
@@ -100,9 +102,7 @@
   ([this {cmd :cmd} evaled]
     (log/debug "Printing evaluated result ...")
     (cond (= :commands cmd)
-          (print-list-items
-            "Available commands:"
-            evaled)
+          (print-list-items no-help evaled)
 
           :else
           evaled)))
