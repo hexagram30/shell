@@ -64,7 +64,7 @@
   (log/debug "Printing evaluated result ...")
   evaled)
 
-(defn handle-request
+(defn handle-line
   [this line]
   (print
     this
@@ -74,20 +74,19 @@
 
 (def behaviour
   {:banner banner
-   :motd motd
    :connect-help connect-help
-   :on-connect on-connect
-   :read read
+   :disconnect? base/disconnect?
    :evaluate evaluate
+   :handle-line handle-line
+   :motd motd
    :print print
    :prompt prompt
-   :handle-disconnect base/handle-disconnect
-   :handle-request handle-request})
+   :on-connect on-connect
+   :read read})
 
 (defn create
   ([]
     (create {}))
   ([opts]
     (map->EntryShell {:options opts
-                      :disconnect-command "quit"
-                      :disconnect-handler (:disconnect-handler opts)})))
+                      :disconnect-command :quit})))
