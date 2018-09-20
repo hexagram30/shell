@@ -36,31 +36,31 @@
                                    :entry
                                    :login
                                    []))))
-  (is (= {:subcommands []
+  (is (= {:subcmds []
           :args ["user"]}
          (parser/subcommands+args test-deep-command-tree
                                   :entry
                                   :login
                                   ["user"])))
-  (is (= {:subcommands []
+  (is (= {:subcmds []
           :args ["user" "world"]}
          (parser/subcommands+args test-deep-command-tree
                                   :entry
                                   :login
                                   ["user" "world"])))
-  (is (= {:subcommands []
+  (is (= {:subcmds []
           :args []}
          (parser/subcommands+args test-deep-command-tree
                                   :test-shell
                                   :cmd1
                                   [])))
-  (is (= {:subcommands []
+  (is (= {:subcmds []
           :args ["arg1"]}
          (parser/subcommands+args test-deep-command-tree
                                   :test-shell
                                   :cmd2
                                   ["arg1"])))
-  (is (= {:subcommands [:scmd1]
+  (is (= {:subcmds [:scmd1]
           :args ["arg1" "arg2"]}
          (parser/subcommands+args test-deep-command-tree
                                   :test-shell
@@ -71,7 +71,7 @@
                                    :test-shell
                                    :cmd2
                                    ["scmd1" "sscmd3" "ssscmd2"])))
-  (is (= {:subcommands [:scmd1 :sscmd3 :ssscmd2]
+  (is (= {:subcmds [:scmd1 :sscmd3 :ssscmd2]
           :args ["arg1" "arg2" "args3"]}
          (parser/subcommands+args test-deep-command-tree
                                   :test-shell
@@ -89,27 +89,31 @@
          (parser/tokenize "test-shell cmd2 scmd1 arg1 arg2"))))
 
 (deftest parse
-  (is (= {:shell :test-shell
-          :cmd nil
-          :subcommands []
-          :args []}
+  (is (= (parser/map->Parsed
+          {:shell :test-shell
+           :cmd nil
+           :subcmds []
+           :args []})
          (parser/parse test-deep-command-tree
                        "test-shell")))
-  (is (= {:shell :test-shell
-          :cmd :cmd1
-          :subcommands []
-          :args []}
+  (is (= (parser/map->Parsed
+          {:shell :test-shell
+           :cmd :cmd1
+           :subcmds []
+           :args []})
          (parser/parse test-deep-command-tree
                        "test-shell cmd1")))
-  (is (= {:shell :test-shell
-          :cmd :cmd1
-          :subcommands []
-          :args ["arg"]}
+  (is (= (parser/map->Parsed
+          {:shell :test-shell
+           :cmd :cmd1
+           :subcmds []
+           :args ["arg"]})
          (parser/parse test-deep-command-tree
                        "test-shell cmd1 arg")))
-  (is (= {:shell :test-shell
-          :cmd :cmd2
-          :subcommands [:scmd1]
-          :args ["arg1" "arg2"]}
+  (is (= (parser/map->Parsed
+          {:shell :test-shell
+           :cmd :cmd2
+           :subcmds [:scmd1]
+           :args ["arg1" "arg2"]})
          (parser/parse test-deep-command-tree
                        "test-shell cmd2 scmd1 arg1 arg2"))))

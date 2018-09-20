@@ -1,9 +1,14 @@
 (ns hxgm30.shell.reader.parser
   (:require
     [clojure.string :as string]
-    [hxgm30.shell.evaluator.core :as evaluator]
     [hxgm30.shell.reader.grammar :as grammar]
     [taoensso.timbre :as log]))
+
+(defrecord Parsed
+  [args
+   cmd
+   shell
+   subcmds])
 
 (defn tokenize
   [line]
@@ -30,7 +35,7 @@
     (subcommands+args grammar/command-tree shell cmd subcmds-args))
   ([cmd-tree shell cmd subcmds-args]
     (let [subcmds (subcommands cmd-tree shell cmd subcmds-args)]
-      {:subcommands (or subcmds [])
+      {:subcmds (or subcmds [])
        :args (or (args subcmds-args subcmds) [])})))
 
 (defn parse
@@ -40,5 +45,6 @@
     (let [[str-shell str-cmd & rest-strs] (tokenize line)
           shell (keyword str-shell)
           cmd (keyword str-cmd)]
-      (merge {:shell shell :cmd cmd}
-             (subcommands+args cmd-tree shell cmd rest-strs)))))
+      (map->Parsed
+        (merge {:shell shell :cmd cmd}
+               (subcommands+args cmd-tree shell cmd rest-strs))))))
