@@ -3,6 +3,7 @@
     [clojure.java.io :as io]
     [clojure.string :as string]
     [hxgm30.common.util :as util]
+    [hxgm30.shell.evaluator.core :as evaluator]
     [hxgm30.shell.impl.base :as base]
     [hxgm30.shell.reader.grammar :as grammar]
     [hxgm30.shell.reader.parser :as reader]
@@ -87,10 +88,10 @@
   (reader/parse (str "entry" \space line)))
 
 (defn evaluate
-  [this {:keys [cmd] :as parsed}]
+  [this {:keys [cmd subcmds] :as parsed}]
   (log/debug "Evaluating command ...")
   (cond (= :commands cmd)
-        (map name (keys (get-in this [:grammar :commands])))
+        (evaluator/commands :entry)
 
         :else
         parsed))
