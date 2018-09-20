@@ -31,8 +31,7 @@
                     "The user will then be prompted to enter a password.")
          :fn #'hxgm30.registration.components.registrar/create-user}
        :reset {
-         :help (str "Perform one or more type of account resets.\n\nSupported "
-                    "subcommands: password, player-key")
+         :help (str "Perform one or more type of account resets.")
          :subcommands {
            :password  {
              :help "Reset the password for a given account."

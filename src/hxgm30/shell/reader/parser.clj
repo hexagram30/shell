@@ -5,10 +5,10 @@
     [taoensso.timbre :as log]))
 
 (defrecord Parsed
-  [args
+  [shell
    cmd
-   shell
-   subcmds])
+   subcmds
+   args])
 
 (defn tokenize
   [line]

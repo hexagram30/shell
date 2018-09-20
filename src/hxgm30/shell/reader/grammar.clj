@@ -109,6 +109,10 @@
       (command-help cmd-tree shell cmd)
       (keys->subcommand cmd-tree shell cmd subcmds))))
 
+(defn has-subcommand?
+  [& args]
+  (not (nil? (:subcommands (apply grammar/command args)))))
+
 (defn subcommand-help
   ([^Keyword shell ^Keyword cmd]
     (subcommand-help command-tree shell cmd []))

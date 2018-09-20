@@ -1,4 +1,11 @@
-{:nrepl {
+{:shell {
+   :formatting {
+     :text-indent 4
+     :list-indent 12
+     :wrap-column 76
+   }
+}
+ :nrepl {
    :port 1132}
  :logging {
    :level :debug
