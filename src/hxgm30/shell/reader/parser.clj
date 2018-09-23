@@ -22,7 +22,7 @@
   [cmd-tree shell cmd subcmds-args]
   (->> (range (inc (count subcmds-args)))
               (map #(subvec (vec subcmds-args) 0 %))
-              (take-while #(grammar/keys->subcommand cmd-tree shell cmd %))
+              (take-while #(grammar/get-in-command cmd-tree shell (cons cmd %)))
               last
               (mapv keyword)))
 

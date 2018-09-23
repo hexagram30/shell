@@ -67,10 +67,9 @@
                                   :cmd2
                                   ["scmd1" "arg1" "arg2"])))
   (is (= {:data :for-ssscmd-2}
-         (grammar/keys->subcommand test-deep-command-tree
-                                   :test-shell
-                                   :cmd2
-                                   ["scmd1" "sscmd3" "ssscmd2"])))
+         (grammar/get-in-command test-deep-command-tree
+                                 :test-shell
+                                 [:cmd2 "scmd1" "sscmd3" "ssscmd2"])))
   (is (= {:subcmds [:scmd1 :sscmd3 :ssscmd2]
           :args ["arg1" "arg2" "args3"]}
          (parser/subcommands+args test-deep-command-tree

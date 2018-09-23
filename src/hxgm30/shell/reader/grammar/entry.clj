@@ -13,12 +13,15 @@
        :help {
          :help (str "Get the documentation for supported commands and any of "
                     "their subcommands. Usage is of the following form: "
+                    formatter/new-line
                     "help <COMMAND> [<SUBCOMMAND> [<SUBCOMMAND> ...]]")}
        :login {
          :help (str "Log in to a game instance on the server. Takes two "
                     "arguments: the user name and the game instance to "
                     "join. The user will then be prompted to enter their "
-                    "password.\n\nSupported game instances: ")
+                    "password."
+                    formatter/new-line
+                    "Supported game instances: ")
          ;; The following needs to be provided by the master project/game
          ;; server. When called, it will provide a list of supported game
          ;; instances.

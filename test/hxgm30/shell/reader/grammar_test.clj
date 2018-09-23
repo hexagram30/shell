@@ -28,12 +28,11 @@
          (grammar/command-fn :entry :register))))
 
 (deftest command-help
-  (is (= (str "Perform one or more type of account resets.\n\nSupported "
-              "subcommands: password, player-key")
+  (is (= (str "Perform one or more type of account resets.")
          (grammar/command-help :entry :reset)))
   (is (= (str "Log in to a game instance on the server. Takes two arguments: "
               "the user name and the game instance to join. The user will "
-              "then be prompted to enter their password.\n\nSupported game "
+              "then be prompted to enter their password.\r\nSupported game "
               "instances: :not-implemented")
          (grammar/command-help :entry :login))))
 
@@ -50,9 +49,11 @@
   (is (= [:password :player-key]
          (sort (keys (grammar/subcommands :entry :reset)))))
   (is (= [:password :player-key]
-       (sort (grammar/subcommands :entry :reset {:as-keys true}))))
+       (sort (grammar/subcommands
+              grammar/command-tree :entry :reset [] {:as-keys true}))))
   (is (= "password, player-key"
-       (grammar/subcommands :entry :reset {:comma-separated true}))))
+       (grammar/subcommands
+        grammar/command-tree :entry :reset [] {:comma-separated true}))))
 
 (deftest subcommands-keys
   (is (= []
@@ -64,14 +65,14 @@
   (is (= [:subcommands :subcmd1 :subcommands :subcmd2 :subcommands :subcmd3]
          (grammar/subcommands-keys ["subcmd1" "subcmd2" "subcmd3"]))))
 
-(deftest keys->subcommand
+(deftest get-in-command
   (is (= {:help "Reset the password for a given account."
           :fn #'hxgm30.registration.components.registrar/reset-password}
-         (grammar/keys->subcommand :entry :reset ["password"])))
+         (grammar/get-in-command :entry [:reset "password"])))
   (is (not
-        (nil? (grammar/keys->subcommand :entry :login []))))
-  (is (nil? (grammar/keys->subcommand :entry :login ["user"])))
-  (is (nil? (grammar/keys->subcommand :entry :login ["user" "world"]))))
+        (nil? (grammar/get-in-command :entry [:login]))))
+  (is (nil? (grammar/get-in-command :entry [:login "user"])))
+  (is (nil? (grammar/get-in-command :entry [:login "user" "world"]))))
 
 (deftest subcommand
   (is (= {:help "Reset the password for a given account."
