@@ -42,7 +42,7 @@
 (defn motd
   [this]
   (str "You have connected to the top-level shell of a Hexagram 30 server. "
-       "If you don't have a user account, can can regsiter to create one; "
+       "If you don't have a user account, regsiter to create one; "
        "if you do, you may create a new playing character or log in to the "
        "game world of your choice with a character you have already created."))
 
@@ -83,11 +83,7 @@
     evaled)
   ([this {cmd :cmd} evaled]
     (log/debug "Printing evaluated result ...")
-    (cond (= :commands cmd)
-          (formatter/list-items no-help evaled)
-
-          :else
-          evaled)))
+    evaled))
 
 (defn handle-line
   [this line]
