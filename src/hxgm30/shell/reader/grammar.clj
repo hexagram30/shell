@@ -2,7 +2,8 @@
   (:require
     [clojure.string :as string]
     [hxgm30.registration.components.registrar]
-    [hxgm30.shell.formatter :as formatter])
+    [hxgm30.shell.formatter :as formatter]
+    [taoensso.timbre :as log])
   (:import
     (clojure.lang Keyword)))
 
@@ -29,6 +30,10 @@
             (cons shell
                   (interleave command-group-keys
                               (map keyword cmds))))))
+
+(defn has-keys?
+  [& args]
+  (not (nil? (apply get-in-command args))))
 
 (defn commands
   ([^Keyword shell]
@@ -87,10 +92,8 @@
   ([^Keyword shell ^Keyword cmd subcmds opts]
     (subcommands command-tree shell cmd subcmds opts))
   ([cmd-tree ^Keyword shell ^Keyword cmd subcmds opts]
-    (let [_subcmds (get-in-command cmd-tree shell (cons cmd subcmds))
-          subcmds (if (empty? subcmds)
-                    (:subcommands _subcmds)
-                    _subcmds)]
+    (let [subcmds (:subcommands (get-in-command
+                                 cmd-tree shell (cons cmd subcmds)))]
       (cond (empty? opts)
             subcmds
 
@@ -108,6 +111,7 @@
 
 (defn has-subcommands?
   [& args]
+  (log/warn "args:" args)
   (not (nil? (apply subcommands args))))
 
 (defn subcommands-keys

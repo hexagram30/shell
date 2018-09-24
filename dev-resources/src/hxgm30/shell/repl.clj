@@ -9,7 +9,11 @@
     [com.stuartsierra.component :as component]
     [hxgm30.shell.components.config :as config]
     [hxgm30.shell.components.core]
+    [hxgm30.shell.core :as shell]
+    [hxgm30.shell.evaluator :as evaluator]
+    [hxgm30.shell.formatter :as formatter]
     [hxgm30.shell.reader.grammar :as grammar]
+    [hxgm30.shell.reader.parser :as parser]
     [taoensso.timbre :as log]
     [trifl.java :refer [show-methods]])
   (:import

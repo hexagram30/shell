@@ -19,12 +19,11 @@
   grammar
   options])
 
-(def no-help "")
 (def commands-with-list-output #{:commands})
 
 (defn prompt
   [this]
-  "\r\nentry> ")
+  "\r\nhxgm30> ")
 
 (defn banner
   [this]
@@ -72,6 +71,8 @@
         (evaluator/commands shell)
 
         (= :help cmd)
+        ;; The cmd doesn't need to be passed, just the args (which are the
+        ;; cmd/subcmds the user wants help on).
         (evaluator/help shell args)
 
         :else
