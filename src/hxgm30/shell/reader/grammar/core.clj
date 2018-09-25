@@ -1,4 +1,4 @@
-(ns hxgm30.shell.reader.grammar
+(ns hxgm30.shell.reader.grammar.core
   (:require
     [clojure.string :as string]
     [hxgm30.registration.components.registrar]
@@ -7,7 +7,7 @@
   (:import
     (clojure.lang Keyword)))
 
-(load "grammar/entry")
+(load "entry")
 
 (def command-group-keys (cons :commands (repeat :subcommands)))
 

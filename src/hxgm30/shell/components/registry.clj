@@ -2,7 +2,7 @@
   (:require
    [hxgm30.shell.config :as shell-config]
    [hxgm30.shell.core :as shell]
-   [hxgm30.shell.reader.grammar :as grammar]
+   [hxgm30.shell.reader.grammar.core :as grammar]
    [com.stuartsierra.component :as component]
    [taoensso.timbre :as log]))
 

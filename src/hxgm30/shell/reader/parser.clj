@@ -1,7 +1,7 @@
 (ns hxgm30.shell.reader.parser
   (:require
     [clojure.string :as string]
-    [hxgm30.shell.reader.grammar :as grammar]
+    [hxgm30.shell.reader.grammar.core :as grammar]
     [taoensso.timbre :as log]))
 
 (defrecord Parsed

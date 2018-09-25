@@ -2,7 +2,7 @@
   (:require
     [clojure.string :as string]
     [clojure.test :refer :all]
-    [hxgm30.shell.reader.grammar :as grammar]
+    [hxgm30.shell.reader.grammar.core :as grammar]
     [hxgm30.shell.reader.parser :as parser]))
 
 (def test-deep-command-tree

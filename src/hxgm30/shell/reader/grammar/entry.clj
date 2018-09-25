@@ -1,4 +1,4 @@
-(in-ns 'hxgm30.shell.reader.grammar)
+(in-ns 'hxgm30.shell.reader.grammar.core)
 
 (def entry-command-tree
   "The commands in this tree are specifically only those supported for

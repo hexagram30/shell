@@ -1,7 +1,7 @@
 (ns hxgm30.shell.reader.grammar-test
   (:require
     [clojure.test :refer :all]
-    [hxgm30.shell.reader.grammar :as grammar]))
+    [hxgm30.shell.reader.grammar.core :as grammar]))
 
 (deftest has-shell?
   (is (grammar/has-shell? :entry))

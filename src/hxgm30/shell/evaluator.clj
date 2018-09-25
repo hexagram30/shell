@@ -2,7 +2,7 @@
   (:require
     [clojure.string :as string]
     [hxgm30.shell.formatter :as formatter]
-    [hxgm30.shell.reader.grammar :as grammar]
+    [hxgm30.shell.reader.grammar.core :as grammar]
     [taoensso.timbre :as log])
   (:import
     (clojure.lang Keyword)))
