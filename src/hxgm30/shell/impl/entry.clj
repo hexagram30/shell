@@ -46,13 +46,7 @@
        "What you do actually see is impossible to describe, and lends itself "
        "more to the poetry of the abstract than visual perception; "
        "interstices of possibility, tendrils of stories yet to unfold ..."
-       formatter/new-line
-       formatter/new-line
-       formatter/new-line
-       "     *   *   *   *   *"
-       formatter/new-line
-       formatter/new-line
-       formatter/new-line
+       formatter/section-divider
        "You have connected to the top-level shell of a Hexagram 30 server. "
        "If you don't have a user account, regsiter to create one; "
        "if you do, you may create a new playing character or log in to the "

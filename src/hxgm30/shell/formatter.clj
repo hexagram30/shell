@@ -9,6 +9,16 @@
 (def default-bullet-char "*")
 (def new-line "\r\n") ; intended for use with Telnet
 
+(def section-divider
+  (str
+    new-line
+    new-line
+    new-line
+    "*   *   *   *   *"
+    new-line
+    new-line
+    new-line))
+
 (defn indent
   ([]
     (indent default-spaces-count))
