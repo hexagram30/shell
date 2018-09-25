@@ -14,16 +14,16 @@
     (java.util Date))
   (:refer-clojure :exclude [read print]))
 
-(defrecord EntryShell [
-  disconnect-command
-  grammar
-  options])
+(defrecord EntryShell
+  [disconnect-command
+   grammar
+   options])
 
 (def commands-with-list-output #{:commands})
 
 (defn prompt
   [this]
-  "\r\nhxgm30> ")
+  "\r\ninterstices> ")
 
 (defn banner
   [this]
@@ -40,7 +40,20 @@
 
 (defn motd
   [this]
-  (str "You have connected to the top-level shell of a Hexagram 30 server. "
+  (str "You gaze around you in beliderment; rather than see, you feel the "
+       "other worlds around you by means of a viceral twitching in your "
+       "hands, almost as if the planetary globes are within reach. "
+       "What you do actually see is impossible to describe, and lends itself "
+       "more to the poetry of the abstract than visual perception; "
+       "interstices of possibility, tendrils of stories yet to unfold ..."
+       formatter/new-line
+       formatter/new-line
+       formatter/new-line
+       "     *   *   *   *   *"
+       formatter/new-line
+       formatter/new-line
+       formatter/new-line
+       "You have connected to the top-level shell of a Hexagram 30 server. "
        "If you don't have a user account, regsiter to create one; "
        "if you do, you may create a new playing character or log in to the "
        "game world of your choice with a character you have already created."))
