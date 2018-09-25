@@ -111,7 +111,7 @@
 
 (defn has-subcommands?
   [& args]
-  (log/warn "args:" args)
+  (log/trace "args:" args)
   (not (nil? (apply subcommands args))))
 
 (defn subcommands-keys
