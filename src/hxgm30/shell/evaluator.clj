@@ -49,12 +49,12 @@
 
 (defn help
   [gmr str-args]
-  (log/debug "grammar:" gmr)
-  (log/debug "str-args:" str-args)
+  (log/trace "grammar:" gmr)
+  (log/trace "str-args:" str-args)
   (let [[cmd & _subcmds] (mapv keyword str-args)
         subcmds (vec _subcmds)]
-    (log/debugf "cmd: %s (type: %s)" cmd (type cmd))
-    (log/debugf "subcmds: %s (type: %s)" subcmds (type subcmds))
+    (log/tracef "cmd: %s (type: %s)" cmd (type cmd))
+    (log/tracef "subcmds: %s (type: %s)" subcmds (type subcmds))
     (cond (nil? cmd)
           (commands gmr)
 
