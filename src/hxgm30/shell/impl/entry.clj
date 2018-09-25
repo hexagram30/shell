@@ -24,7 +24,7 @@
 
 (defn prompt
   [this]
-  "\r\ninterstitium> ")
+  "\r\n% interstitium> ")
 
 (defn banner
   [this]
