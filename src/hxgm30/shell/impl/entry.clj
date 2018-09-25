@@ -17,13 +17,14 @@
 (defrecord EntryShell
   [disconnect-command
    grammar
+   parser
    options])
 
 (def commands-with-list-output #{:commands})
 
 (defn prompt
   [this]
-  "\r\ninterstices> ")
+  "\r\ninterstitium> ")
 
 (defn banner
   [this]
@@ -69,18 +70,18 @@
 (defn read
   [this line]
   (log/debug "Reading command ...")
-  (reader/parse (str "entry" \space line)))
+  (reader/parse (:grammar this) line))
 
 (defn evaluate
-  [this {:keys [shell cmd subcmds args] :as parsed}]
+  [this {:keys [cmd subcmds args] :as parsed}]
   (log/debug "Evaluating command ...")
   (cond (= :commands cmd)
-        (evaluator/commands shell)
+        (evaluator/commands (:grammar this))
 
         (= :help cmd)
         ;; The cmd doesn't need to be passed, just the args (which are the
         ;; cmd/subcmds the user wants help on).
-        (evaluator/help shell args)
+        (evaluator/help (:grammar this) args)
 
         :else
         (into {} parsed)))
@@ -116,6 +117,7 @@
   ([]
     (create {}))
   ([opts]
+    (let [entry-grammar (grammar/create :entry)]
     (map->EntryShell (merge base/default-options
-                            {:grammar (:entry grammar/command-tree)
-                             :options opts}))))
+                            {:grammar entry-grammar
+                             :options opts})))))

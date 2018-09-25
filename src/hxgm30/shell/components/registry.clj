@@ -16,10 +16,6 @@
 ;;;   Registry Component API   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn command-tree
-  [system shell]
-  (get-in system [:grammar :command-tree shell]))
-
 (defn get-shell
   [system shell]
   (get-in system [:shell :registry shell]))
@@ -36,7 +32,6 @@
   [this]
   (log/info "Starting shell registry component ...")
   (log/debug "Started shell registry component.")
-  (assoc-in this [:grammar :command-tree] grammar/command-tree)
   (assoc-in this [:registry :entry] (shell/create :entry)))
 
 (defn stop

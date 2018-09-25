@@ -3,57 +3,55 @@
     [clojure.test :refer :all]
     [hxgm30.shell.reader.grammar.core :as grammar]))
 
-(deftest has-shell?
-  (is (grammar/has-shell? :entry))
-  (is (not (grammar/has-shell? :quux))))
+(def entry-grammar (grammar/create :entry))
 
 (deftest commands
   (is (= [:commands :help :login :quit :register :reset]
-         (sort (keys (grammar/commands :entry)))))
+         (sort (keys (grammar/commands entry-grammar)))))
   (is (= [:commands :help :login :quit :register :reset]
-         (sort (grammar/commands :entry {:as-keys true})))))
+         (sort (grammar/commands entry-grammar {:as-keys true})))))
 
 (deftest has-command?
-  (is (grammar/has-command? :entry :login))
-  (is (not (grammar/has-command? :entry :blurf)))
+  (is (grammar/has-command? entry-grammar :login))
+  (is (not (grammar/has-command? entry-grammar :blurf)))
   (is (not (grammar/has-command? :quux :xyzzy))))
 
 (deftest command
   (is (= {:help (str "Create a user account. Takes one argument, the user name. "
                      "The user will then be prompted to enter a password.")
           :fn #'hxgm30.registration.components.registrar/create-user}
-         (grammar/command :entry :register)))
+         (grammar/command entry-grammar :register)))
 
   (is (= #'hxgm30.registration.components.registrar/create-user
-         (grammar/command-fn :entry :register))))
+         (grammar/command-fn entry-grammar :register))))
 
 (deftest command-help
   (is (= (str "Perform one or more type of account resets.")
-         (grammar/command-help :entry :reset)))
+         (grammar/command-help entry-grammar :reset)))
   (is (= (str "Log in to a game instance on the server. Takes two arguments: "
               "the user name and the game instance to join. The user will "
               "then be prompted to enter their password.\r\nSupported game "
               "instances: :not-implemented")
-         (grammar/command-help :entry :login))))
+         (grammar/command-help entry-grammar :login))))
 
 (deftest login-fn
   (is (= :not-implemented
-         ((grammar/command-fn :entry :login)))))
+         ((grammar/command-fn entry-grammar :login)))))
 
 (deftest has-subcommands?
-  (is (not (grammar/has-subcommands? :entry :login)))
-  (is (not (grammar/has-subcommands? :entry :register)))
-  (is (grammar/has-subcommands? :entry :reset)))
+  (is (not (grammar/has-subcommands? entry-grammar :login)))
+  (is (not (grammar/has-subcommands? entry-grammar :register)))
+  (is (grammar/has-subcommands? entry-grammar :reset)))
 
 (deftest subcommands
   (is (= [:password :player-key]
-         (sort (keys (grammar/subcommands :entry :reset)))))
+         (sort (keys (grammar/subcommands entry-grammar :reset)))))
   (is (= [:password :player-key]
        (sort (grammar/subcommands
-              grammar/command-tree :entry :reset [] {:as-keys true}))))
+              entry-grammar :reset [] {:as-keys true}))))
   (is (= "password, player-key"
        (grammar/subcommands
-        grammar/command-tree :entry :reset [] {:comma-separated true}))))
+        entry-grammar :reset [] {:comma-separated true}))))
 
 (deftest subcommands-keys
   (is (= []
@@ -68,25 +66,25 @@
 (deftest get-in-command
   (is (= {:help "Reset the password for a given account."
           :fn #'hxgm30.registration.components.registrar/reset-password}
-         (grammar/get-in-command :entry [:reset "password"])))
+         (grammar/get-in-command entry-grammar [:reset "password"])))
   (is (not
-        (nil? (grammar/get-in-command :entry [:login]))))
-  (is (nil? (grammar/get-in-command :entry [:login "user"])))
-  (is (nil? (grammar/get-in-command :entry [:login "user" "world"]))))
+        (nil? (grammar/get-in-command entry-grammar [:login]))))
+  (is (nil? (grammar/get-in-command entry-grammar [:login "user"])))
+  (is (nil? (grammar/get-in-command entry-grammar [:login "user" "world"]))))
 
 (deftest subcommand
   (is (= {:help "Reset the password for a given account."
           :fn #'hxgm30.registration.components.registrar/reset-password}
-         (grammar/subcommand :entry :reset [:password])))
+         (grammar/subcommand entry-grammar :reset [:password])))
   (is (= "Reset the player key for a given account."
-         (grammar/subcommand-help :entry :reset [:player-key])))
+         (grammar/subcommand-help entry-grammar :reset [:player-key])))
   (is (= #'hxgm30.registration.components.registrar/reset-player-key
-         (grammar/subcommand-fn :entry :reset [:player-key]))))
+         (grammar/subcommand-fn entry-grammar :reset [:player-key]))))
 
 (deftest callable?
-  (is (grammar/callable? :entry :login))
-  (is (grammar/callable? :entry :register))
-  (is (grammar/callable? :entry :reset [:password]))
-  (is (grammar/callable? :entry :reset [:player-key]))
-  (is (not (grammar/callable? :entry :help)))
-  (is (not (grammar/callable? :entry :reset))))
+  (is (grammar/callable? entry-grammar :login))
+  (is (grammar/callable? entry-grammar :register))
+  (is (grammar/callable? entry-grammar :reset [:password]))
+  (is (grammar/callable? entry-grammar :reset [:player-key]))
+  (is (not (grammar/callable? entry-grammar :help)))
+  (is (not (grammar/callable? entry-grammar :reset))))

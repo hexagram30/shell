@@ -3,14 +3,12 @@
     [clojure.string :as string]
     [hxgm30.shell.formatter :as formatter]
     [hxgm30.shell.reader.grammar.core :as grammar]
-    [taoensso.timbre :as log])
-  (:import
-    (clojure.lang Keyword)))
+    [taoensso.timbre :as log]))
 
 (defn commands
-  [^Keyword shell]
+  [gmr]
   (str formatter/new-line
-       (grammar/commands shell
+       (grammar/commands gmr
                          {:as-item-list true
                           :prefix-text (str "Available commands:"
                                             formatter/new-line)})
@@ -19,47 +17,54 @@
                                  "type 'help <COMMAND>'."))))
 
 (defn- -subcmd-help-text
-  [shell cmd subcmds]
+  [gmr cmd subcmds]
   [(grammar/subcommands
-    shell
+    gmr
     cmd
     subcmds
     {:as-item-list true
-     :prefix-text (str "Available subcommands:"
-                       formatter/new-line)})
+     :prefix-text (str "Available subcommands:" formatter/new-line)})
    formatter/new-line
    (formatter/paragraph
      (str "To view the help for a subcommand, type "
          "'help <COMMAND> <SUBCOMMAND>'"))])
 
 (defn- -cmd-help-text
-  [shell cmd subcmds]
-  (log/warn "shell:" shell)
-  (log/warn "cmd:" cmd)
-  (log/warn "subcmds:" subcmds)
+  [gmr cmd subcmds]
+  (log/trace "grammar:" gmr)
+  (log/trace "cmd:" cmd)
+  (log/trace "subcmds:" subcmds)
+  (log/trace "(cons cmd subcmds):" (cons cmd subcmds))
+  (log/tracef "(grammar/has-keys? gmr %s): %s"
+              (cons cmd subcmds)
+              (grammar/has-keys? gmr (cons cmd subcmds)))
+  (log/tracef "(grammar/has-subcommands? gmr %s %s): %s"
+              cmd
+              subcmds
+              (grammar/has-subcommands? gmr cmd subcmds))
   (concat [formatter/new-line
-           (formatter/paragraph (grammar/subcommand-help shell cmd subcmds))]
-          (when (grammar/has-keys? shell (cons cmd subcmds))
-            (-subcmd-help-text shell cmd subcmds))))
+           (formatter/paragraph (grammar/subcommand-help gmr cmd subcmds))]
+          (when (grammar/has-subcommands? gmr cmd subcmds)
+            (-subcmd-help-text gmr cmd subcmds))))
 
 (defn help
-  [^Keyword shell str-args]
-  (log/debug "shell:" shell)
+  [gmr str-args]
+  (log/debug "grammar:" gmr)
   (log/debug "str-args:" str-args)
   (let [[cmd & _subcmds] (mapv keyword str-args)
         subcmds (vec _subcmds)]
     (log/debugf "cmd: %s (type: %s)" cmd (type cmd))
     (log/debugf "subcmds: %s (type: %s)" subcmds (type subcmds))
     (cond (nil? cmd)
-          (commands shell)
+          (commands gmr)
 
-          (not (grammar/has-command? shell cmd))
-          {:error :command-not-cound}
+          (not (grammar/has-command? gmr cmd))
+          {:error :command-not-found}
 
           (and (not (or (nil? subcmds)
                         (empty? subcmds)))
-               (not (apply grammar/has-keys? [shell (cons cmd subcmds)])))
+               (not (apply grammar/has-keys? [gmr (cons cmd subcmds)])))
           {:error :subcommand-not-found}
 
           :else
-          (string/join "" (-cmd-help-text shell cmd subcmds)))))
+          (string/join "" (-cmd-help-text gmr cmd subcmds)))))

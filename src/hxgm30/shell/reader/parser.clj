@@ -5,8 +5,7 @@
     [taoensso.timbre :as log]))
 
 (defrecord Parsed
-  [shell
-   cmd
+  [cmd
    subcmds
    args])
 
@@ -19,10 +18,10 @@
   (string/join " " words))
 
 (defn subcommands
-  [cmd-tree shell cmd subcmds-args]
+  [grammar cmd subcmds-args]
   (->> (range (inc (count subcmds-args)))
               (map #(subvec (vec subcmds-args) 0 %))
-              (take-while #(grammar/get-in-command cmd-tree shell (cons cmd %)))
+              (take-while #(grammar/get-in-command grammar (cons cmd %)))
               last
               (mapv keyword)))
 
@@ -31,20 +30,15 @@
   (vec (nthrest subcmds-args (count subcmds))))
 
 (defn subcommands+args
-  ([shell cmd subcmds-args]
-    (subcommands+args grammar/command-tree shell cmd subcmds-args))
-  ([cmd-tree shell cmd subcmds-args]
-    (let [subcmds (subcommands cmd-tree shell cmd subcmds-args)]
-      {:subcmds (or subcmds [])
-       :args (or (args subcmds-args subcmds) [])})))
+  [grammar cmd subcmds-args]
+  (let [subcmds (subcommands grammar cmd subcmds-args)]
+    {:subcmds (or subcmds [])
+     :args (or (args subcmds-args subcmds) [])}))
 
 (defn parse
-  ([line]
-    (parse grammar/command-tree line))
-  ([cmd-tree line]
-    (let [[str-shell str-cmd & rest-strs] (tokenize line)
-          shell (keyword str-shell)
-          cmd (keyword str-cmd)]
-      (map->Parsed
-        (merge {:shell shell :cmd cmd}
-               (subcommands+args cmd-tree shell cmd rest-strs))))))
+  [grammar line]
+  (let [[str-cmd & rest-strs] (tokenize line)
+        cmd (when (seq str-cmd) (keyword str-cmd))]
+    (map->Parsed
+      (merge {:cmd cmd}
+             (subcommands+args grammar cmd rest-strs)))))
