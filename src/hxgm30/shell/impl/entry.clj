@@ -3,6 +3,7 @@
     [clojure.java.io :as io]
     [clojure.string :as string]
     [hxgm30.common.util :as util]
+    [hxgm30.shell.errors :as errors]
     [hxgm30.shell.evaluator :as evaluator]
     [hxgm30.shell.formatter :as formatter]
     [hxgm30.shell.impl.base :as base]
@@ -75,16 +76,32 @@
 (defn evaluate
   [this {:keys [cmd subcmds args] :as parsed}]
   (log/debug "Evaluating command ...")
-  (cond (= :commands cmd)
-        (evaluator/commands (:grammar this))
+  (let [gmr (:grammar this)]
+    (cond (not (grammar/has-command? gmr cmd))
+          (evaluator/no-command gmr cmd)
 
-        (= :help cmd)
-        ;; The cmd doesn't need to be passed, just the args (which are the
-        ;; cmd/subcmds the user wants help on).
-        (evaluator/help (:grammar this) args)
+          (= :commands cmd)
+          (evaluator/commands gmr)
 
-        :else
-        (into {} parsed)))
+          (= :help cmd)
+          ;; The cmd doesn't need to be passed, just the args (which are the
+          ;; cmd/subcmds the user wants help on).
+          (evaluator/help gmr args)
+
+          (= :login cmd)
+          :not-implemented
+
+          (= :register cmd)
+          (apply (grammar/command-fn gmr cmd) args)
+
+          (= :reset cmd)
+          (apply (grammar/command-fn gmr cmd) args)
+
+          ;; Note that quit is handled by the terminal app, since it is
+          ;; responsible for closing the connection.
+
+          :else
+          (into {} parsed))))
 
 (defn print
   ([this evaled]

@@ -3,6 +3,7 @@
     [clojure.string :as string]
     [hxgm30.shell.formatter :as formatter]
     [hxgm30.shell.reader.grammar.entry :as entry]
+    [hxgm30.shell.util :as util]
     [taoensso.timbre :as log])
   (:import
     (clojure.lang Keyword)
@@ -52,6 +53,14 @@
 (defn has-command?
   [grammar ^Keyword cmd]
   (not (nil? (command grammar cmd))))
+
+(defn fuzzy-command-keys
+  [grammar ^Keyword cmd-attempt]
+  (util/get-metaphone2 (:metaphones grammar) cmd-attempt))
+
+(defn has-fuzzy-command?
+  [grammar ^Keyword cmd-attempt]
+  (seq (fuzzy-command-keys grammar cmd-attempt)))
 
 (defn command-help
   [grammar ^Keyword cmd]

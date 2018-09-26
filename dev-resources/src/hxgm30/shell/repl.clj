@@ -1,5 +1,6 @@
 (ns hxgm30.shell.repl
   (:require
+    [clj-fuzzy.phonetics :as phonetics]
     [clojure.java.io :as io]
     [clojure.pprint :refer [pprint]]
     [clojure.string :as string]
@@ -13,6 +14,7 @@
     [hxgm30.shell.evaluator :as evaluator]
     [hxgm30.shell.formatter :as formatter]
     [hxgm30.shell.reader.grammar.core :as grammar]
+    [hxgm30.shell.reader.grammar.entry :as entry-grammar]
     [hxgm30.shell.reader.parser :as parser]
     [taoensso.timbre :as log]
     [trifl.java :refer [show-methods]])

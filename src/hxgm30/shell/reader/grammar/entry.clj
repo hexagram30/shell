@@ -1,7 +1,8 @@
 (ns hxgm30.shell.reader.grammar.entry
   (:require
     [hxgm30.registration.components.registrar]
-    [hxgm30.shell.formatter :as formatter]))
+    [hxgm30.shell.formatter :as formatter]
+    [hxgm30.shell.util :as util]))
 
 (def command-tree
   "The commands in this tree are specifically only those supported for
@@ -43,9 +44,14 @@
          :help "Reset the player key for a given account."
          :fn #'hxgm30.registration.components.registrar/reset-player-key}}}})
 
+(def metaphones
+  (util/metaphone2-lookup (keys command-tree)))
+
 (defrecord EntryGrammar
-  [command-tree])
+  [command-tree
+   metaphones])
 
 (defn create
   ([]
-    (map->EntryGrammar {:command-tree command-tree})))
+    (map->EntryGrammar {:command-tree command-tree
+                        :metaphones metaphones})))
