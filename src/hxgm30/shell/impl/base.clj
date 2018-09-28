@@ -1,6 +1,6 @@
 (ns hxgm30.shell.impl.base
   (:require
-    [hxgm30.shell.reader.parser :as parser]
+    [hxgm30.shell.reader.parser.base :as parser]
     [taoensso.timbre :as log])
   (:refer-clojure :exclude [empty parse]))
 
@@ -17,7 +17,7 @@
 
 (defn parse
   [this request]
-  (parser/parse (:disconnect-command this) request))
+  (parser/parse (:parser this) (:grammar this) request))
 
 (def behaviour
   {:banner banner

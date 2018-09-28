@@ -1,8 +1,11 @@
-(ns hxgm30.shell.reader.parser
+(ns hxgm30.shell.reader.parser.base
   (:require
     [clojure.string :as string]
     [hxgm30.shell.reader.grammar.core :as grammar]
     [taoensso.timbre :as log]))
+
+(defrecord Parser
+  [])
 
 (defrecord Parsed
   [cmd
@@ -36,9 +39,13 @@
      :args (or (args subcmds-args subcmds) [])}))
 
 (defn parse
-  [grammar line]
+  [this grammar line]
   (let [[str-cmd & rest-strs] (tokenize line)
         cmd (when (seq str-cmd) (keyword str-cmd))]
     (map->Parsed
       (merge {:cmd cmd}
              (subcommands+args grammar cmd rest-strs)))))
+
+(defn create
+  []
+  (->Parser))
