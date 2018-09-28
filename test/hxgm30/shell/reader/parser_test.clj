@@ -3,7 +3,7 @@
     [clojure.string :as string]
     [clojure.test :refer :all]
     [hxgm30.shell.reader.grammar.core :as grammar]
-    [hxgm30.shell.reader.parser :as parser]))
+    [hxgm30.shell.reader.parser.base :as parser]))
 
 (def test-deep-command-tree
   {:cmd1 {:data :for-cmd-1}
@@ -24,8 +24,12 @@
 (defrecord TestGrammar
   [command-tree])
 
+(defrecord TestParser
+  [])
+
 (def test-grammar (->TestGrammar test-deep-command-tree))
 (def entry-grammar (grammar/create :entry))
+(def test-parser (->TestParser))
 
 (deftest subcommands+args
   (is (not
@@ -91,19 +95,19 @@
           {:cmd nil
            :subcmds []
            :args []})
-         (parser/parse test-grammar "")))
+         (parser/parse test-parser test-grammar "")))
   (is (= (parser/map->Parsed
           {:cmd :cmd1
            :subcmds []
            :args []})
-         (parser/parse test-grammar "cmd1")))
+         (parser/parse test-parser test-grammar "cmd1")))
   (is (= (parser/map->Parsed
           {:cmd :cmd1
            :subcmds []
            :args ["arg"]})
-         (parser/parse test-grammar "cmd1 arg")))
+         (parser/parse test-parser test-grammar "cmd1 arg")))
   (is (= (parser/map->Parsed
           {:cmd :cmd2
            :subcmds [:scmd1]
            :args ["arg1" "arg2"]})
-         (parser/parse test-grammar "cmd2 scmd1 arg1 arg2"))))
+         (parser/parse test-parser test-grammar "cmd2 scmd1 arg1 arg2"))))

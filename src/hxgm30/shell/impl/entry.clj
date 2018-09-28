@@ -8,7 +8,7 @@
     [hxgm30.shell.formatter :as formatter]
     [hxgm30.shell.impl.base :as base]
     [hxgm30.shell.reader.grammar.core :as grammar]
-    [hxgm30.shell.reader.parser :as reader]
+    [hxgm30.shell.reader.parser.base :as parser]
     [taoensso.timbre :as log])
   (:import
     (java.net InetAddress)
@@ -71,7 +71,7 @@
 (defn read
   [this line]
   (log/debug "Reading command ...")
-  (reader/parse (:grammar this) line))
+  (parser/parse (:parser this) (:grammar this) line))
 
 (defn evaluate
   [this {:keys [cmd subcmds args] :as parsed}]
@@ -137,4 +137,5 @@
     (let [entry-grammar (grammar/create :entry)]
     (map->EntryShell (merge base/default-options
                             {:grammar entry-grammar
+                             :parser (parser/create (:parser opts))
                              :options opts})))))
