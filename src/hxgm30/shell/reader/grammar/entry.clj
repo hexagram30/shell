@@ -17,10 +17,11 @@
                 formatter/new-line
                 "help <COMMAND> [<SUBCOMMAND> [<SUBCOMMAND> ...]]")}
    :login {
-     :help (str "Log in to a game instance on the server. Takes two "
-                "arguments: the user name and the game instance to "
-                "join. The user will then be prompted to enter their "
-                "password."
+     :help (str "Log into a game instance on the server. Providing a user "
+                "name only will put you into the player shell; providing a "
+                "user name as well as a player (character) name will put you "
+                "directly into the game world. In both cases, you will be "
+                "prompted for a password."
                 formatter/new-line
                 "Supported game instances: ")
      ;; The following needs to be provided by the master project/game
