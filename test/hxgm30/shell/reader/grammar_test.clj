@@ -28,10 +28,11 @@
 (deftest command-help
   (is (= (str "Perform one or more type of account resets.")
          (grammar/command-help entry-grammar :reset)))
-  (is (= (str "Log in to a game instance on the server. Takes two arguments: "
-              "the user name and the game instance to join. The user will "
-              "then be prompted to enter their password.\r\nSupported game "
-              "instances: :not-implemented")
+  (is (= (str "Log into a game instance on the server. Providing a user name "
+              "only will put you into the player shell; providing a user name "
+              "as well as a player (character) name will put you directly "
+              "into the game world. In both cases, you will be prompted for a "
+              "password.\r\nSupported game instances: :not-implemented")
          (grammar/command-help entry-grammar :login))))
 
 (deftest login-fn
