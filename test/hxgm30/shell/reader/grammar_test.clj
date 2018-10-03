@@ -1,6 +1,7 @@
 (ns hxgm30.shell.reader.grammar-test
   (:require
     [clojure.test :refer :all]
+    [hxgm30.shell.formatter :as formatter]
     [hxgm30.shell.reader.grammar.core :as grammar]))
 
 (def entry-grammar (grammar/create :entry))
@@ -28,11 +29,16 @@
 (deftest command-help
   (is (= (str "Perform one or more type of account resets.")
          (grammar/command-help entry-grammar :reset)))
-  (is (= (str "Log into a game instance on the server. Providing a user name "
-              "only will put you into the player shell; providing a user name "
-              "as well as a player (character) name will put you directly "
-              "into the game world. In both cases, you will be prompted for a "
-              "password.\r\nSupported game instances: :not-implemented")
+  (is (= (str "Log into a game instance on the server. Providing a user "
+              "name only will put you into the player shell. Providing a "
+              "user name as well as a game instance will result in a list "
+              "of character names that player has in the given game, one of "
+              "which will need to be selected. Providing a user name, game "
+              "instance, and a player (character) name will put you "
+              "directly into the game world. In all cases, you will be "
+              "prompted for a password."
+              formatter/new-line
+              "Supported game instances: :not-implemented")
          (grammar/command-help entry-grammar :login))))
 
 (deftest login-fn

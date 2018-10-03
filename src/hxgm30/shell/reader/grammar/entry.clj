@@ -18,9 +18,12 @@
                 "help <COMMAND> [<SUBCOMMAND> [<SUBCOMMAND> ...]]")}
    :login {
      :help (str "Log into a game instance on the server. Providing a user "
-                "name only will put you into the player shell; providing a "
-                "user name as well as a player (character) name will put you "
-                "directly into the game world. In both cases, you will be "
+                "name only will put you into the player shell. Providing a "
+                "user name as well as a game instance will result in a list "
+                "of character names that player has in the given game, one of "
+                "which will need to be selected. Providing a user name, game "
+                "instance, and a player (character) name will put you "
+                "directly into the game world. In all cases, you will be "
                 "prompted for a password."
                 formatter/new-line
                 "Supported game instances: ")
