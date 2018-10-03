@@ -20,7 +20,14 @@
     [trifl.java :refer [show-methods]])
   (:import
     (java.net URI)
-    (java.nio.file Paths)))
+    (java.nio.file Paths)
+
+    (org.jline.reader LineReaderBuilder)
+    (org.jline.reader.impl.completer StringsCompleter)
+    (org.jline.terminal TerminalBuilder)
+
+
+    ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Initial Setup & Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -70,3 +77,25 @@
   (load "/hxgm30/terminal/util/networkless")
   (let [start-server (ns-resolve 'hxgm30.terminal.util.networkless 'start-server)]
     (start-server)))
+
+
+(def in-stream (new java.io.InputStream))
+(def out-stream (new java.io.OutputStream))
+(def terminal
+  (doto (TerminalBuilder/builder)
+        (.name "Hexagram30 JLine Terminal")
+        (.system false)
+        (.streams in-stream out-stream)
+        (.jansi true)
+        (.build)))
+
+(def completer (new StringsCompleter "foo" "bar" "baz")
+
+(def reader
+  (doto (LineReaderBuilder/builder)
+        (.appName "Hexagram30 Entry Shell")
+        (.terminal terminal)
+        (.completer completer)
+        (.parser parser)
+        ;(.history history)
+        ))

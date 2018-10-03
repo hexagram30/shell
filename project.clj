@@ -26,7 +26,9 @@
     [clojusc/twig "0.3.3"]
     [hexagram30/common "0.1.0-SNAPSHOT"]
     [hexagram30/registration "0.1.0-SNAPSHOT"]
-    [org.clojure/clojure "1.9.0"]]
+    [org.clojure/clojure "1.9.0"]
+    [org.fusesource.jansi/jansi "1.17.1"]
+    [org.jline/jline "3.9.0"]]
   :plugins [
     [venantius/ultra "0.5.2"]]
   :ultra {
