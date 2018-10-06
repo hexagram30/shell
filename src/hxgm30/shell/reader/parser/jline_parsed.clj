@@ -1,6 +1,6 @@
 (ns hxgm30.shell.reader.parser.jline-parsed
   (:import
-    [org.jline.reader.Parser$ParseContext]))
+    (org.jline.reader.Parser$ParseContext)))
 
 (gen-class
     :name #^{org.jline.reader.CompletingParsedLine true}
@@ -11,7 +11,9 @@
 (defn -parse
   ([^String line ^Integer cursor]
     )
-  ([^String line ^Integer cursor ^Parser$ParseContext parse-context]
+  ([^String line
+    ^Integer cursor
+    ^org.jline.reader.Parser$ParseContext parse-context]
     ))
 
 (defn create
