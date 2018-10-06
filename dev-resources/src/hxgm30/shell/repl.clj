@@ -79,23 +79,23 @@
     (start-server)))
 
 
-(def in-stream (new java.io.InputStream))
-(def out-stream (new java.io.OutputStream))
-(def terminal
-  (doto (TerminalBuilder/builder)
-        (.name "Hexagram30 JLine Terminal")
-        (.system false)
-        (.streams in-stream out-stream)
-        (.jansi true)
-        (.build)))
+; (def in-stream (new java.io.InputStream))
+; (def out-stream (new java.io.OutputStream))
+; (def terminal
+;   (doto (TerminalBuilder/builder)
+;         (.name "Hexagram30 JLine Terminal")
+;         (.system false)
+;         (.streams in-stream out-stream)
+;         (.jansi true)
+;         (.build)))
 
-(def completer (new StringsCompleter "foo" "bar" "baz")
+; (def completer (new StringsCompleter "foo" "bar" "baz")
 
-(def reader
-  (doto (LineReaderBuilder/builder)
-        (.appName "Hexagram30 Entry Shell")
-        (.terminal terminal)
-        (.completer completer)
-        (.parser parser)
-        ;(.history history)
-        ))
+; (def reader
+;   (doto (LineReaderBuilder/builder)
+;         (.appName "Hexagram30 Entry Shell")
+;         (.terminal terminal)
+;         (.completer completer)
+;         (.parser parser)
+;         ;(.history history)
+;         ))

@@ -15,7 +15,9 @@
 (defn -parse
   ([^String line ^Integer cursor]
     )
-  ([^String line ^Integer cursor ^Parser$ParseContext parse-context]
+  ([^String line
+    ^Integer cursor
+    ^org.jline.reader.Parser$ParseContext parse-context]
     ))
 
 (defn create
