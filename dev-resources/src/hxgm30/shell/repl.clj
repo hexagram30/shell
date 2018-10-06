@@ -15,7 +15,7 @@
     [hxgm30.shell.formatter :as formatter]
     [hxgm30.shell.reader.grammar.core :as grammar]
     [hxgm30.shell.reader.grammar.entry :as entry-grammar]
-    [hxgm30.shell.reader.parser :as parser]
+    [hxgm30.shell.reader.parser.core :as parser]
     [taoensso.timbre :as log]
     [trifl.java :refer [show-methods]])
   (:import
