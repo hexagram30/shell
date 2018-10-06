@@ -1,4 +1,4 @@
-(ns hxgm30.shell.impl.entry
+(ns hxgm30.shell.impl.player
   (:require
     [clojure.java.io :as io]
     [clojure.string :as string]
@@ -16,7 +16,7 @@
     (java.util Date))
   (:refer-clojure :exclude [read print]))
 
-(defrecord EntryShell
+(defrecord PlayerShell
   [disconnect-command
    grammar
    parser
@@ -26,34 +26,17 @@
 
 (defn prompt
   [this]
-  "\r\n% interstitium> ")
+  "\r\n% player> ")
 
 (defn banner
   [this]
-  (str formatter/new-line
-       "Welcome to"
-       (slurp (io/resource "text/banner.txt"))
-       formatter/new-line
-       "Running on "
-       (.getHostName (InetAddress/getLocalHost))
-       formatter/new-line
-       "Current server time: "
-       (new Date)
-       formatter/new-line))
+  "")
 
 (defn motd
   [this]
-  (str "You gaze around you in beliderment; rather than see, you feel the "
-       "other worlds around you by means of a viceral twitching in your "
-       "hands, almost as if the planetary globes are within reach. "
-       "What you do actually see is impossible to describe, and lends itself "
-       "more to the poetry of the abstract than visual perception; "
-       "interstices of possibility, tendrils of stories yet to unfold ..."
-       formatter/section-divider
-       "You have connected to the top-level shell of a Hexagram 30 server. "
-       "If you don't have a user account, regsiter to create one; "
-       "if you do, you may create a new playing character or log in to the "
-       "game world of your choice with a character you have already created."))
+  (str "Behind you are the interstices of all worlds; you have stepped out "
+       "into one of these that provides a better view into the connected "
+       "worlds ... and the means by which you may interact with them."))
 
 (defn on-connect
   [this]
@@ -78,15 +61,6 @@
           ;; The cmd doesn't need to be passed, just the args (which are the
           ;; cmd/subcmds the user wants help on).
           (evaluator/help gmr args)
-
-          (= :login cmd)
-          :not-implemented
-
-          (= :register cmd)
-          (apply (grammar/command-fn gmr cmd) args)
-
-          (= :reset cmd)
-          (apply (grammar/command-fn gmr cmd) args)
 
           ;; Note that quit is handled by the terminal app, since it is
           ;; responsible for closing the connection.
@@ -117,8 +91,8 @@
   ([]
     (create {}))
   ([opts]
-    (let [entry-grammar (grammar/create :entry)]
-    (map->EntryShell (merge base/default-options
-                            {:grammar entry-grammar
-                             :parser (parser/create (:parser opts))
-                             :options opts})))))
+    (let [player-grammar (grammar/create :player)]
+    (map->PlayerShell (merge base/default-options
+                             {:grammar player-grammar
+                              :parser (parser/create (:parser opts))
+                              :options opts})))))

@@ -1,9 +1,11 @@
 (ns hxgm30.shell.core
   (:require
-    [hxgm30.shell.impl.entry :as entry])
+    [hxgm30.shell.impl.entry :as entry]
+    [hxgm30.shell.impl.player :as player])
   (:import
     (clojure.lang Keyword)
-    (hxgm30.shell.impl.entry EntryShell))
+    (hxgm30.shell.impl.entry EntryShell)
+    (hxgm30.shell.impl.player PlayerShell))
   (:refer-clojure :exclude [print read]))
 
 (defprotocol ShellAPI
@@ -53,10 +55,15 @@
         ShellAPI
         entry/behaviour)
 
+(extend PlayerShell
+        ShellAPI
+        player/behaviour)
+
 (defn create
   ([^Keyword shell-type]
     (create shell-type {}))
   ([^Keyword shell-type opts]
     (case shell-type
       :entry (entry/create opts)
+      :player (player/create opts)
       :unsupprted-shell)))
