@@ -54,7 +54,7 @@
       :source-paths ^:replace ["src"]
       :test-paths ^:replace []
       :plugins [
-        [jonase/eastwood "0.2.9"]
+        [jonase/eastwood "0.3.1"]
         [lein-ancient "0.6.15"]
         [lein-bikeshed "0.5.1"]
         [lein-kibit "0.1.6"]
@@ -89,6 +89,7 @@
     "build" ["do"
       ["clean"]
       ["check-vers"]
+      ["ubercompile"]
       ["lint"]
       ["ltest" ":all"]
       ["uberjar"]]})
