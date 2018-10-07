@@ -25,6 +25,8 @@
     [clojusc/system-manager "0.3.0-SNAPSHOT"]
     [clojusc/twig "0.3.3"]
     [hexagram30/common "0.1.0-SNAPSHOT"]
+    [hexagram30/db-plugin "0.1.0-SNAPSHOT"]
+    [hexagram30/redis-db-plugin "0.1.0-SNAPSHOT"]
     [hexagram30/registration "0.1.0-SNAPSHOT"]
     [org.clojure/clojure "1.9.0"]
     [org.fusesource.jansi/jansi "1.17.1"]

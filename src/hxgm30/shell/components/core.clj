@@ -5,6 +5,7 @@
     [hxgm30.shell.components.logging :as logging]
     [hxgm30.shell.components.nrepl :as nrepl]
     [hxgm30.shell.components.registry :as registry]
+    [hxgm30.shell.components.session :as session]
     [taoensso.timbre :as log]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -25,10 +26,10 @@
            (nrepl/create-component)
            [:config :logging])})
 
-(defn common
-  [cfg-data]
-  (merge (cfg cfg-data)
-         log))
+(def sess
+  {:session (component/using
+             (session/create-component)
+             [:config :logging])})
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Component Initializations   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -37,17 +38,25 @@
 (defn initialize-bare-bones
   []
   (-> (config/build-config)
-      common
+      cfg
+      (merge log)
       component/map->SystemMap))
 
-(def initialize initialize-bare-bones)
+(defn initialize
+  []
+  (-> (config/build-config)
+      cfg
+      (merge log
+             ;;nrepl
+             sess)
+      component/map->SystemMap))
 
 (def init-lookup
   {:basic #'initialize-bare-bones
-   :default #'initialize})
+   :main #'initialize})
 
 (defn init
   ([]
-    (init :default))
+    (init :main))
   ([mode]
     ((mode init-lookup))))
