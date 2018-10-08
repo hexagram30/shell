@@ -38,7 +38,7 @@
       :width 180
       :map-delimiter ""
       :extend-notation true
-      :print-meta true}}
+      :print-meta false}}
   :profiles {
     :ubercompile {
       :aot :all}

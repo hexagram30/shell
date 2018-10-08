@@ -10,6 +10,7 @@
     [com.stuartsierra.component :as component]
     [hxgm30.shell.components.config :as config]
     [hxgm30.shell.components.core]
+    [hxgm30.shell.components.session :as session]
     [hxgm30.shell.core :as shell]
     [hxgm30.shell.evaluator :as evaluator]
     [hxgm30.shell.formatter :as formatter]
@@ -21,13 +22,9 @@
   (:import
     (java.net URI)
     (java.nio.file Paths)
-
     (org.jline.reader LineReaderBuilder)
     (org.jline.reader.impl.completer StringsCompleter)
-    (org.jline.terminal TerminalBuilder)
-
-
-    ))
+    (org.jline.terminal TerminalBuilder)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Initial Setup & Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

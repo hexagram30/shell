@@ -1,12 +1,17 @@
-{:shell {
+{:backend {
+   :plugin :redis
+   :subtype :db
+   :db {
+     :redis {
+       :host "localhost"
+       :port 6389}}}
+ :logging {
+   :level :debug
+   :nss [hxgm30]}
+ :nrepl {
+   :port 1132}
+ :shell {
    :formatting {
      :text-indent 4
      :list-indent 12
-     :wrap-column 76
-   }
-}
- :nrepl {
-   :port 1132}
- :logging {
-   :level :debug
-   :nss [hxgm30]}}
+     :wrap-column 76}}}
