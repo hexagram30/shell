@@ -34,21 +34,25 @@
       user-id)))
 
 (defn write-data
-  "This reader offers 2 arities: one for a known user with a known user id,
-  and another for the situations where a user is not known (e.g., anonymous
-  users, pre-login). This will allow for anonymous users to have sessions with
-  persistent data that can then be included in their user data, once they
-  register."
-  ([system data]
+  ""
+  [system user-id data]
+  (db/update-session
+    (get-db system)
+    user-id
+    data))
+
+(defn create
+  ""
+  ([system]
+    (create system {}))
+  ([system init-data]
     ;; XXX Once the user registration work is complete, use that to create
     ;;     a user id, so that only one function is responsible for
     ;;     id-generation.
-    (write-data (str (UUID/randomUUID)) data))
-  ([system user-id data]
-    (db/update-session
-      (get-db system)
-      user-id
-      data)))
+    (let [anon-user-id (str (UUID/randomUUID))
+          anon-user-data init-data]
+      (write-data system anon-user-id anon-user-data)
+      anon-user-id)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Component Lifecycle Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
