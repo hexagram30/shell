@@ -30,16 +30,19 @@
 (def default-options {:disconnect-command :quit})
 
 (defn read
-  [this line]
-  (log/debug "Reading command ...")
-  (parser/parse (:parser this) (:grammar this) line))
+  ([this line]
+    (read this nil line))
+  ([this session-id line]
+    (log/debugf "Reading command (session-id: %s)..." session-id)
+    (parser/parse (:parser this) (:grammar this) line)))
 
 (defn print
   ([this evaled]
-    (log/debug "Printing evaluated result ...")
-    evaled)
-  ([this {cmd :cmd} evaled]
-    (log/debug "Printing evaluated result ...")
+    (print this {} evaled))
+  ([this cmd-data evaled]
+    (print this nil cmd-data evaled))
+  ([this session-id {cmd :cmd} evaled]
+    (log/debugf "Printing evaluated result (session-id: %s)..." session-id)
     evaled))
 
 (defn connect-help

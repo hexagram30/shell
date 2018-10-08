@@ -23,7 +23,7 @@
   :dependencies [
     [clj-fuzzy "0.4.1"]
     [clojusc/system-manager "0.3.0-SNAPSHOT"]
-    [clojusc/twig "0.3.3"]
+    [clojusc/twig "0.4.0"]
     [hexagram30/common "0.1.0-SNAPSHOT"]
     [hexagram30/db-plugin "0.1.0-SNAPSHOT"]
     [hexagram30/redis-db-plugin "0.1.0-SNAPSHOT"]
@@ -31,27 +31,29 @@
     [org.clojure/clojure "1.9.0"]
     [org.fusesource.jansi/jansi "1.17.1"]
     [org.jline/jline "3.9.0"]]
-  :plugins [
-    [venantius/ultra "0.5.2"]]
-  :ultra {
-    :repl {
-      :width 180
-      :map-delimiter ""
-      :extend-notation true
-      :print-meta false}}
   :profiles {
     :ubercompile {
       :aot :all}
+    :local {
+      :dependencies [
+        [hexagram30/terminal "0.1.0-SNAPSHOT"]]}
     :dev {
       :dependencies [
-        [clojusc/trifl "0.3.0"]
-        [hexagram30/terminal "0.1.0-SNAPSHOT"]
+        [clojusc/trifl "0.4.0"]
         [org.clojure/tools.namespace "0.2.11"]]
+      :plugins [
+        [venantius/ultra "0.5.2"]]
       :source-paths ["dev-resources/src"]
       :repl-options {
         :init-ns hxgm30.shell.repl
         :prompt ~get-prompt
-        :init ~(println (get-banner))}}
+        :init ~(println (get-banner))}
+      :ultra {
+        :repl {
+          :width 180
+          :map-delimiter ""
+          :extend-notation true
+          :print-meta false}}}
     :lint {
       :source-paths ^:replace ["src"]
       :test-paths ^:replace []

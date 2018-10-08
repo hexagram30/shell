@@ -65,34 +65,36 @@
        formatter/new-line))
 
 (defn evaluate
-  [this {:keys [cmd subcmds args] :as parsed}]
-  (log/debug "Evaluating command ...")
-  (let [gmr (:grammar this)]
-    (cond (not (grammar/has-command? gmr cmd))
-          (evaluator/no-command gmr cmd)
+  ([this parsed]
+    (evaluate nil parsed))
+  ([this session-id {:keys [cmd subcmds args] :as parsed}]
+    (log/debugf "Evaluating command (session-id: %s) ..." session-id)
+    (let [gmr (:grammar this)]
+      (cond (not (grammar/has-command? gmr cmd))
+            (evaluator/no-command gmr cmd)
 
-          (= :commands cmd)
-          (evaluator/commands gmr)
+            (= :commands cmd)
+            (evaluator/commands gmr)
 
-          (= :help cmd)
-          ;; The cmd doesn't need to be passed, just the args (which are the
-          ;; cmd/subcmds the user wants help on).
-          (evaluator/help gmr args)
+            (= :help cmd)
+            ;; The cmd doesn't need to be passed, just the args (which are the
+            ;; cmd/subcmds the user wants help on).
+            (evaluator/help gmr args)
 
-          (= :login cmd)
-          :not-implemented
+            (= :login cmd)
+            :not-implemented
 
-          (= :register cmd)
-          (apply (grammar/command-fn gmr cmd) args)
+            (= :register cmd)
+            (apply (grammar/command-fn gmr cmd) args)
 
-          (= :reset cmd)
-          (apply (grammar/command-fn gmr cmd) args)
+            (= :reset cmd)
+            (apply (grammar/command-fn gmr cmd) args)
 
-          ;; Note that quit is handled by the terminal app, since it is
-          ;; responsible for closing the connection.
+            ;; Note that quit is handled by the terminal app, since it is
+            ;; responsible for closing the connection.
 
-          :else
-          (into {} parsed))))
+            :else
+            (into {} parsed)))))
 
 (defn handle-line
   [this line]

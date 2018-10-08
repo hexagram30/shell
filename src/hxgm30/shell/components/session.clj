@@ -7,7 +7,7 @@
     [hxgm30.shell.components.config :as config]
     [taoensso.timbre :as log])
   (:import
-    [java.util UUID]))
+    (java.util UUID)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Utility Functions   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -49,10 +49,9 @@
     ;; XXX Once the user registration work is complete, use that to create
     ;;     a user id, so that only one function is responsible for
     ;;     id-generation.
-    (let [anon-user-id (str (UUID/randomUUID))
-          anon-user-data init-data]
-      (write-data system anon-user-id anon-user-data)
-      anon-user-id)))
+    (let [anon-user-id (str (UUID/randomUUID))]
+      (write-data system anon-user-id init-data)
+      {:session-id anon-user-id})))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;   Component Lifecycle Implementation   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
