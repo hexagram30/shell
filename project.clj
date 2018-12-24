@@ -22,11 +22,11 @@
     :url "http://www.apache.org/licenses/LICENSE-2.0"}
   :dependencies [
     [clj-fuzzy "0.4.1"]
-    [clojusc/system-manager "0.3.0-SNAPSHOT"]
-    [clojusc/twig "0.3.3"]
+    [clojusc/system-manager "0.3.0"]
+    [clojusc/twig "0.4.0"]
     [hexagram30/common "0.1.0-SNAPSHOT"]
     [hexagram30/registration "0.1.0-SNAPSHOT"]
-    [org.clojure/clojure "1.9.0"]
+    [org.clojure/clojure "1.10.0"]
     [org.fusesource.jansi/jansi "1.17.1"]
     [org.jline/jline "3.9.0"]]
   :plugins [
@@ -42,7 +42,7 @@
       :aot :all}
     :dev {
       :dependencies [
-        [clojusc/trifl "0.3.0"]
+        [clojusc/trifl "0.4.2"]
         [hexagram30/terminal "0.1.0-SNAPSHOT"]
         [org.clojure/tools.namespace "0.2.11"]]
       :source-paths ["dev-resources/src"]
@@ -54,11 +54,11 @@
       :source-paths ^:replace ["src"]
       :test-paths ^:replace []
       :plugins [
-        [jonase/eastwood "0.3.1"]
+        [jonase/eastwood "0.3.4"]
         [lein-ancient "0.6.15"]
         [lein-bikeshed "0.5.1"]
         [lein-kibit "0.1.6"]
-        [venantius/yagni "0.1.6"]]}
+        [venantius/yagni "0.1.7"]]}
     :test {
       :plugins [[lein-ltest "0.3.0"]]}}
   :aliases {
