@@ -9,7 +9,7 @@
     [hxgm30.shell.impl.base :as base]
     [hxgm30.shell.reader.grammar.common :as common-grammar]
     [hxgm30.shell.reader.grammar.core :as grammar]
-    [hxgm30.shell.reader.parser.base :as parser]
+    [hxgm30.shell.reader.parser.core :as parser]
     [taoensso.timbre :as log])
   (:import
     (java.net InetAddress)
@@ -117,8 +117,10 @@
   ([]
     (create {}))
   ([opts]
-    (let [entry-grammar (grammar/create :entry)]
-    (map->EntryShell (merge base/default-options
-                            {:grammar entry-grammar
-                             :parser (parser/create (:parser opts))
-                             :options opts})))))
+    (let [entry-grammar (grammar/create :entry)
+          parser-type (or (:parser opts) :base)]
+      (log/warn "Got parser type:" parser-type)
+      (map->EntryShell (merge base/default-options
+                              {:grammar entry-grammar
+                               :parser (parser/create parser-type)
+                               :options opts})))))

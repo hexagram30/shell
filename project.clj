@@ -92,4 +92,8 @@
       ["ubercompile"]
       ["lint"]
       ["ltest" ":all"]
-      ["uberjar"]]})
+      ["uberjar"]]
+    "install" ["do"
+      ["clean"]
+      ["ubercompile"]
+      ["install"]]})
