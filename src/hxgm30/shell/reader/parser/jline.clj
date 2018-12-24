@@ -2,7 +2,7 @@
   (:require
     [hxgm30.shell.reader.parser.base :as base])
   (:import
-    [org.jline.reader.Parser$ParseContext]))
+    [org.jline.reader Parser$ParseContext]))
 
 
 (gen-class
@@ -17,13 +17,11 @@
     )
   ([^String line
     ^Integer cursor
-    ^org.jline.reader.Parser$ParseContext parse-context]
+    ^Parser$ParseContext parse-context]
     ))
 
 (defn create
   [parser-type]
   )
 
-
 ;org.jline.reader.CompletingParsedLine
-
